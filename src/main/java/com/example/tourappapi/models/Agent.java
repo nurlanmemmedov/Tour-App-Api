@@ -20,13 +20,13 @@ public class Agent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private String username;
     private String email;
     private String voen;
     @Column(name = "agent_name")
     private String agentName;
     @Column(name = "company_name")
     private String companyName;
-    private String password;
     @Column(name = "is_active")
     private Boolean isActive;
     @LazyCollection(LazyCollectionOption.FALSE)
