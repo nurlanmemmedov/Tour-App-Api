@@ -9,6 +9,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -29,6 +30,7 @@ public class Request {
     private String travelStartDate;
     private Integer travellerCount;
     private Integer budget;
+    private LocalDateTime deadline;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "request",

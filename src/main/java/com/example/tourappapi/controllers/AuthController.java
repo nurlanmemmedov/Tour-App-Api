@@ -1,9 +1,8 @@
 package com.example.tourappapi.controllers;
 
-import com.example.tourappapi.dtos.LoginPostDto;
-import com.example.tourappapi.dtos.LoginResponseDto;
-import com.example.tourappapi.dtos.RegisterPostDto;
-import com.example.tourappapi.dtos.RegisterResponseDto;
+import com.example.tourappapi.dto.LoginPostDto;
+import com.example.tourappapi.dto.LoginResponseDto;
+import com.example.tourappapi.dto.RegisterPostDto;
 import com.example.tourappapi.services.interfaces.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +21,7 @@ public class AuthController {
 
     @PostMapping(path = "/create")
     public ResponseEntity<String> createUser(@RequestBody RegisterPostDto userDTO) {
+
         return new ResponseEntity<>(service.register(userDTO), HttpStatus.CREATED);
     }
 

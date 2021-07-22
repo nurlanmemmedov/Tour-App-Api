@@ -1,9 +1,8 @@
 package com.example.tourappapi.services.interfaces;
 
-import com.example.tourappapi.dtos.LoginPostDto;
-import com.example.tourappapi.dtos.LoginResponseDto;
-import com.example.tourappapi.dtos.RegisterPostDto;
-import com.example.tourappapi.dtos.RegisterResponseDto;
+import com.example.tourappapi.dto.LoginPostDto;
+import com.example.tourappapi.dto.LoginResponseDto;
+import com.example.tourappapi.dto.RegisterPostDto;
 
 public interface AuthService {
     /**

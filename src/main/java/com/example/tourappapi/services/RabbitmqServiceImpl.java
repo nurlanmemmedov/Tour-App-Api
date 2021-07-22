@@ -2,6 +2,7 @@ package com.example.tourappapi.services;
 
 import com.example.tourappapi.configs.RabbitmqConfig;
 import com.example.tourappapi.models.Offer;
+import com.example.tourappapi.models.Request;
 import com.example.tourappapi.services.interfaces.RabbitmqService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +24,10 @@ public class RabbitmqServiceImpl implements RabbitmqService {
     @Override
     public void sendToOfferQueue(Offer offer) {
         template.convertAndSend(RabbitmqConfig.QUEUE, offer);
+    }
+
+    @Override
+    public void sendToRequestQueue(Request request) {
+        template.convertAndSend(RabbitmqConfig.REQUESTQUEUE, request);
     }
 }
