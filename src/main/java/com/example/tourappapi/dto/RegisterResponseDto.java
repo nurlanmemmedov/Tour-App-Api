@@ -1,4 +1,4 @@
-package com.example.tourappapi.dtos;
+package com.example.tourappapi.dto;
 
 public class RegisterResponseDto {
 }
