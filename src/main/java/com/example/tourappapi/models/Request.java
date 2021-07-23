@@ -1,6 +1,6 @@
 package com.example.tourappapi.models;
 
-import com.example.tourappapi.enums.AgentRequestStatus;
+import com.example.tourappapi.enums.RequestStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,22 +23,14 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String uuid;
-    private String language;
-    private String tourType;
-    private String addressFrom;
-    private String addressTo;
-    private String travelStartDate;
-    private Integer travellerCount;
-    private Integer budget;
+
+    @Column(name = "questions_json")
+    private String questionsJson;
+
     private LocalDateTime deadline;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "request",
-            cascade = CascadeType.ALL)
-    private List<AgentRequest> requestStatuses;
+    @Column(name = "is_active", columnDefinition = "boolean default true")
+    private Boolean isActive;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "request",
-            cascade = CascadeType.ALL)
-    private List<Offer> offers;
+    private RequestStatus status;
 }
