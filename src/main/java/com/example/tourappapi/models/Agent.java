@@ -29,13 +29,4 @@ public class Agent {
     private String companyName;
     @Column(name = "is_active")
     private Boolean isActive;
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "request",
-            cascade = CascadeType.ALL)
-    private List<AgentRequest> requestStatuses;
-
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "request",
-            cascade = CascadeType.ALL)
-    private List<Offer> offers;
 }

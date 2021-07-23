@@ -27,6 +27,23 @@ public class AgentRequestServiceImpl implements AgentRequestService {
         List<Agent> agents = agentService.getAll();
         agents.stream().forEach(a -> dao.save(AgentRequest.builder()
                 .agent(a).request(request)
-                .status(AgentRequestStatus.NEW).build()));
+                .status(AgentRequestStatus.ACTIVE).build()));
+    }
+
+    @Override
+    public void changeStatus(Integer id, AgentRequestStatus status, String username) {
+        AgentRequest agentRequest = dao.getById(id);
+        agentRequest.setStatus(status);
+        dao.save(agentRequest);
+    }
+
+    @Override
+    public List<AgentRequest> findByStatus(String status, String username) {
+        return dao.getAllByStatus(AgentRequestStatus.valueOf(status), username);
+    }
+
+    @Override
+    public List<AgentRequest> getAll(String username) {
+        return dao.getAll(username);
     }
 }
