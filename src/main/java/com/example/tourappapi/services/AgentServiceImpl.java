@@ -27,6 +27,11 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
+    public Agent getByUsername(String username) {
+        return dao.getByUsername(username);
+    }
+
+    @Override
     public void delete(Integer id) {
         dao.delete(id);
     }

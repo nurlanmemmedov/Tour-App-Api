@@ -1,6 +1,7 @@
 package com.example.tourappapi.services;
 
 import com.example.tourappapi.configs.RabbitmqConfig;
+import com.example.tourappapi.dto.OfferDto;
 import com.example.tourappapi.models.Offer;
 import com.example.tourappapi.models.Request;
 import com.example.tourappapi.services.interfaces.RabbitmqService;
@@ -22,12 +23,12 @@ public class RabbitmqServiceImpl implements RabbitmqService {
      * @param offer
      */
     @Override
-    public void sendToOfferQueue(Offer offer) {
-        template.convertAndSend(RabbitmqConfig.QUEUE, offer);
+    public void sendToOfferQueue(OfferDto offer) {
+        template.convertAndSend(RabbitmqConfig.OFFERQUEUE, offer);
     }
 
     @Override
     public void sendToRequestQueue(Request request) {
-        template.convertAndSend(RabbitmqConfig.REQUESTQUEUE, request);
+        template.convertAndSend(RabbitmqConfig.QUEUE, request);
     }
 }

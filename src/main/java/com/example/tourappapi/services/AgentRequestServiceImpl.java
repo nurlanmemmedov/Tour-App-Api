@@ -38,6 +38,11 @@ public class AgentRequestServiceImpl implements AgentRequestService {
     }
 
     @Override
+    public AgentRequest getById(Integer id) {
+        return dao.getById(id);
+    }
+
+    @Override
     public List<AgentRequest> findByStatus(String status, String username) {
         return dao.getAllByStatus(AgentRequestStatus.valueOf(status), username);
     }

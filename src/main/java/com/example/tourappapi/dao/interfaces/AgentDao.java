@@ -9,6 +9,8 @@ public interface AgentDao {
 
     Agent getById(Integer id);
 
+    Agent getByUsername(String username);
+
     void delete(Integer id);
 
     List<Agent> getAll();

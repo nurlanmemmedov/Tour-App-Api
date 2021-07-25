@@ -17,5 +17,4 @@ public class RequestServiceImpl implements RequestService {
     public Request save(Request request){
         return dao.save(request);
     }
-
 }
