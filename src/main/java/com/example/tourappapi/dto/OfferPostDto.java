@@ -11,8 +11,11 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Data
-public class OfferDto {
-    private String uuid;
-    private String path;
-    private Integer agentId;
+public class OfferPostDto {
+    private String description;
+    private String places;
+    private Integer budget;
+    private Date startDate;
+    private Date endDate;
+    private String note;
 }

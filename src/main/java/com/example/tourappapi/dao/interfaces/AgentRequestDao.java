@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface AgentRequestDao {
     AgentRequest save(AgentRequest request);
-    void delete(Integer id);
+    void delete(String username, Integer id);
     AgentRequest getById(Integer id);
     List<AgentRequest> getAllByStatus(AgentRequestStatus status, String username);
     List<AgentRequest> getAll(String username);

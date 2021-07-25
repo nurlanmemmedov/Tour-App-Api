@@ -27,7 +27,7 @@ public class RequestListener {
         this.agentRequestService = agentRequestService;
     }
 
-    @RabbitListener(queues = RabbitmqConfig.REQUESTQUEUE)
+    @RabbitListener(queues = RabbitmqConfig.QUEUE)
     public void consumeMessageFromQueue(Request request)  {
         request.setDeadline(RequestUtil.getDeadline(start, end , deadline));
         service.save(request);

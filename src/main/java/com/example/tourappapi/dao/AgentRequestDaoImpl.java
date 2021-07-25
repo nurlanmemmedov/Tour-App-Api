@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class AgentRequestImpl implements AgentRequestDao {
+public class AgentRequestDaoImpl implements AgentRequestDao {
 
     private AgentRequestRepository repository;
 
-    public AgentRequestImpl(AgentRequestRepository repository){
+    public AgentRequestDaoImpl(AgentRequestRepository repository){
         this.repository = repository;
     }
 
@@ -23,8 +23,13 @@ public class AgentRequestImpl implements AgentRequestDao {
     }
 
     @Override
-    public void delete(Integer id) {
-        repository.deleteById(id);
+    public void delete(String username, Integer id) {
+        AgentRequest agentRequest = getById(id);
+        if (agentRequest.getAgent().getUsername().equals(username)){
+            repository.deleteById(id);
+            return;
+        }
+        //TODO throw exception
     }
 
     @Override
