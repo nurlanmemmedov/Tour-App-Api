@@ -9,4 +9,7 @@ import java.util.List;
 public interface RequestRepository extends JpaRepository<Request, Integer> {
     @Query("SELECT r FROM Request r JOIN Offer o ON o.request = r WHERE o.agent.username=:username GROUP BY r")
     List<Request> getOfferedRequests(String username);
+
+    @Query(value = "UPDATE requests SET is_active = FALSE WHERE deadline < now()", nativeQuery = true)
+    boolean updateExpiredRequests();
 }

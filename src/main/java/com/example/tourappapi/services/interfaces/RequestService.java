@@ -7,4 +7,5 @@ import java.util.List;
 public interface RequestService {
     Request save(Request request);
     List<Request> getOfferedRequests(String username);
+    void updateExpiredRequests();
 }
