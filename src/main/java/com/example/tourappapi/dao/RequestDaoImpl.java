@@ -24,4 +24,9 @@ public class RequestDaoImpl implements RequestDao {
     public List<Request> getOfferedRequests(String username) {
         return repository.getOfferedRequests(username);
     }
+
+    @Override
+    public void updateExpiredRequests() {
+        repository.updateExpiredRequests();
+    }
 }

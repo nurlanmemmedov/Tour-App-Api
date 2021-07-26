@@ -24,4 +24,9 @@ public class RequestServiceImpl implements RequestService {
     public List<Request> getOfferedRequests(String username) {
         return dao.getOfferedRequests(username);
     }
+
+    @Override
+    public void updateExpiredRequests() {
+        dao.updateExpiredRequests();
+    }
 }
