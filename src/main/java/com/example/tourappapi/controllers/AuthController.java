@@ -3,11 +3,16 @@ package com.example.tourappapi.controllers;
 import com.example.tourappapi.dto.*;
 import com.example.tourappapi.services.interfaces.AuthService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RequestMapping(value = "/api/v1/users")
 @RestController
+@Validated
 public class AuthController {
 
     AuthService service;
@@ -16,8 +21,8 @@ public class AuthController {
         this.service = service;
     }
 
-    @PostMapping(path = "/create")
-    public ResponseEntity<String> createUser(@RequestBody RegisterPostDto userDTO) {
+    @PostMapping(path = "/register")
+    public ResponseEntity<String> createUser(@RequestBody @Valid RegisterPostDto userDTO) {
         return new ResponseEntity<>(service.register(userDTO), HttpStatus.CREATED);
     }
 

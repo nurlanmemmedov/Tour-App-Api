@@ -3,6 +3,8 @@ package com.example.tourappapi.services;
 import com.example.tourappapi.dao.interfaces.OfferDao;
 import com.example.tourappapi.dto.OfferDto;
 import com.example.tourappapi.dto.OfferPostDto;
+import com.example.tourappapi.exceptions.NotWorkTimeException;
+import com.example.tourappapi.exceptions.RequestInactiveException;
 import com.example.tourappapi.models.Agent;
 import com.example.tourappapi.models.AgentRequest;
 import com.example.tourappapi.models.Offer;
@@ -48,10 +50,10 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public Offer save(String username, Integer id, OfferPostDto offer) throws JRException, FileNotFoundException {
-        Agent agent = agentService.getByUsername(username); //TODO throw exception
-        AgentRequest agentRequest = agentRequestService.getById(id); //TODO throw exception
-//        if (!RequestUtil.validateWorkingHours(agentRequest.getRequest(), start, end)) return null; //TODO throw exception
-        if (!RequestUtil.validateDeadline(agentRequest.getRequest())) return null; //TODO throw exception
+        Agent agent = agentService.getByUsername(username);
+        AgentRequest agentRequest = agentRequestService.getById(id);
+        if (!RequestUtil.validateWorkingHours(agentRequest.getRequest(), start, end)) throw new NotWorkTimeException();
+        if (!agentRequest.getRequest().getIsActive()) throw new RequestInactiveException();
         File offerFile = jasperService.generateImage(offer);
         String imagePath = fileService.upload(offerFile);
         Offer created = dao.save(Offer.builder().imagePath(imagePath)

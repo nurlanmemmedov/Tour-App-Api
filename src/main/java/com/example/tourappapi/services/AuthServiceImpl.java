@@ -1,6 +1,7 @@
 package com.example.tourappapi.services;
 
 import com.example.tourappapi.dto.*;
+import com.example.tourappapi.exceptions.*;
 import com.example.tourappapi.models.Agent;
 import com.example.tourappapi.models.ConfirmationToken;
 import com.example.tourappapi.repositories.AgentRepository;
@@ -113,9 +114,12 @@ public class AuthServiceImpl implements AuthService {
         Configuration configuration =
                 new Configuration(authServerUrl, realm, clientId, clientCredentials, null);
         AuthzClient authzClient = AuthzClient.create(configuration);
-        AccessTokenResponse response =
-                authzClient.obtainAccessToken(user.getEmail(), user.getPassword());
-        return new LoginResponseDto(response.getToken());
+        try{
+            AccessTokenResponse response = authzClient.obtainAccessToken(user.getEmail(), user.getPassword());
+            return new LoginResponseDto(response.getToken());
+        }catch (Exception e){
+            throw new LoginException();
+        }
     }
 
     /**
@@ -125,7 +129,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void forgotPassword(String email) {
         Agent agent = service.getByEmail(email);
-        if (agent == null) return; //TODO catch exception
+        if (agent == null) throw new NoSuchEmailException();
         ConfirmationToken token = new ConfirmationToken(agent);
         confirmationTokenRepository.save(token);
         emailService.sendMail(agent.getEmail(), "Tour", "Reset your password" + forgotPasswordUrl + token.getConfirmationToken());
@@ -138,8 +142,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void resetPassword(ResetPasswordDto dto) {
         ConfirmationToken token = confirmationTokenRepository.getByConfirmationToken(dto.getToken());
-        if (token == null)return; //TODO throw exception
-        if (LocalDateTime.now().isAfter(token.getCreatedDate().plusDays(3))) return; //TODO throw exception
+        if (token == null) throw new InvalidTokenException();
+        if (LocalDateTime.now().isAfter(token.getCreatedDate().plusDays(3))) throw new TokenExpiredException();
         Keycloak keycloak = KeycloakBuilder.builder().serverUrl(authServerUrl)
                 .grantType(OAuth2Constants.PASSWORD).realm("master").clientId("admin-cli")
                 .username("nurlan").password("rafet123")
@@ -149,7 +153,7 @@ public class AuthServiceImpl implements AuthService {
         List<UserRepresentation> userRepresentations = usersResource.search(token.getAgent().getUsername());
         UserRepresentation userRepresentation = userRepresentations.stream()
                 .filter(u -> u.getUsername().equals(token.getAgent().getUsername())).findFirst().orElse(null);
-        if (userRepresentation == null) return;; //TODO exception
+        if (userRepresentation == null) throw new UserNotFoundException();
         UserResource userResource = usersResource.get(userRepresentation.getId());
         CredentialRepresentation passwordCred = new CredentialRepresentation();
         passwordCred.setTemporary(false);
@@ -169,7 +173,7 @@ public class AuthServiceImpl implements AuthService {
         List<UserRepresentation> userRepresentations = usersResource.search(username);
         UserRepresentation userRepresentation = userRepresentations.stream()
                 .filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
-        if (userRepresentation == null) return;; //TODO exception
+        if (userRepresentation == null) throw new UserNotFoundException();
 
         UserResource userResource = usersResource.get(userRepresentation.getId());
         CredentialRepresentation passwordCred = new CredentialRepresentation();

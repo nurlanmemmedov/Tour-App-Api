@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 @Data
 @NoArgsConstructor
@@ -16,7 +13,7 @@ public class RegisterPostDto {
     @NotNull(message = "Field cannot be null")
     @Email
     private String email;
-    @NotNull(message = "Field cannot be null")
+    @NotNull(message = "Name is mandatory")
     private String username;
     private String voen;
     @NotNull(message = "Field cannot be null")

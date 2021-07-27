@@ -1,6 +1,7 @@
 package com.example.tourappapi.services;
 
 import com.example.tourappapi.dao.interfaces.AgentDao;
+import com.example.tourappapi.exceptions.UserNotFoundException;
 import com.example.tourappapi.models.Agent;
 import com.example.tourappapi.services.interfaces.AgentService;
 import org.springframework.stereotype.Service;
@@ -23,17 +24,23 @@ public class AgentServiceImpl implements AgentService {
 
     @Override
     public Agent getById(Integer id) {
-        return dao.getById(id);
+        Agent agent = dao.getById(id);
+        if (agent == null) throw new UserNotFoundException();
+        return agent;
     }
 
     @Override
     public Agent getByUsername(String username) {
-        return dao.getByUsername(username);
+        Agent agent = dao.getByUsername(username);
+        if (agent == null) throw new UserNotFoundException();
+        return agent;
     }
 
     @Override
     public Agent getByEmail(String email) {
-        return dao.getByEmail(email);
+        Agent agent = dao.getByEmail(email);
+        if (agent == null) throw new UserNotFoundException();
+        return agent;
     }
 
     @Override
