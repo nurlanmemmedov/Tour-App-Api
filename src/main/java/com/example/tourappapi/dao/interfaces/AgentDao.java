@@ -11,6 +11,8 @@ public interface AgentDao {
 
     Agent getByUsername(String username);
 
+    Agent getByEmail(String email);
+
     void delete(Integer id);
 
     List<Agent> getAll();

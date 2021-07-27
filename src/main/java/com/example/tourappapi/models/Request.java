@@ -24,8 +24,8 @@ public class Request {
     private Integer id;
     private String uuid;
 
-    @Column(name = "questions_json")
-    private String questionsJson;
+    @Column(name = "answers_json")
+    private String answersJson;
 
     private LocalDateTime deadline;
 

@@ -1,8 +1,6 @@
 package com.example.tourappapi.controllers;
 
-import com.example.tourappapi.dto.LoginPostDto;
-import com.example.tourappapi.dto.LoginResponseDto;
-import com.example.tourappapi.dto.RegisterPostDto;
+import com.example.tourappapi.dto.*;
 import com.example.tourappapi.services.interfaces.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +15,6 @@ public class AuthController {
     public AuthController(AuthService service){
         this.service = service;
     }
-
 
     @PostMapping(path = "/create")
     public ResponseEntity<String> createUser(@RequestBody RegisterPostDto userDTO) {
@@ -35,4 +32,22 @@ public class AuthController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @RequestMapping("forgot-password")
+    public ResponseEntity forgotPassword(@RequestBody ForgotPasswordDto data){
+        service.forgotPassword(data.getEmail());
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping("reset-password")
+    public ResponseEntity resetPassword(@RequestBody ResetPasswordDto data){
+        service.resetPassword(data);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping("change-password")
+    public ResponseEntity changePassword(@RequestAttribute UserDto user,
+                                         @RequestBody ChangePasswordDto data){
+        service.changePassword(user.getUsername(), data);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }

@@ -17,7 +17,7 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
-    public Agent create(Agent agent) {
+    public Agent save(Agent agent) {
         return dao.create(agent);
     }
 
@@ -29,6 +29,11 @@ public class AgentServiceImpl implements AgentService {
     @Override
     public Agent getByUsername(String username) {
         return dao.getByUsername(username);
+    }
+
+    @Override
+    public Agent getByEmail(String email) {
+        return dao.getByEmail(email);
     }
 
     @Override
