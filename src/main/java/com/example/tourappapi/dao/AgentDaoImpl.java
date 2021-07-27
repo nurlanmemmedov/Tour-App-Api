@@ -32,6 +32,11 @@ public class AgentDaoImpl implements AgentDao {
     }
 
     @Override
+    public Agent getByEmail(String email) {
+        return repository.getAgentByEmail(email);
+    }
+
+    @Override
     public void delete(Integer id) {
         repository.deleteById(id);
     }

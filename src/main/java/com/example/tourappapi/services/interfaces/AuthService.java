@@ -1,8 +1,6 @@
 package com.example.tourappapi.services.interfaces;
 
-import com.example.tourappapi.dto.LoginPostDto;
-import com.example.tourappapi.dto.LoginResponseDto;
-import com.example.tourappapi.dto.RegisterPostDto;
+import com.example.tourappapi.dto.*;
 
 public interface AuthService {
     /**
@@ -25,4 +23,22 @@ public interface AuthService {
      * @return
      */
     LoginResponseDto login(LoginPostDto user);
+
+    /**
+     * sends email to confirm account
+     * @param email
+     */
+    void forgotPassword(String email);
+
+    /**
+     * resets the password
+     * @param dto
+     */
+    void resetPassword(ResetPasswordDto dto);
+
+    /**
+     * changes password
+     * @param dto
+     */
+    void changePassword(String username, ChangePasswordDto dto);
 }

@@ -50,7 +50,7 @@ public class OfferServiceImpl implements OfferService {
     public Offer save(String username, Integer id, OfferPostDto offer) throws JRException, FileNotFoundException {
         Agent agent = agentService.getByUsername(username); //TODO throw exception
         AgentRequest agentRequest = agentRequestService.getById(id); //TODO throw exception
-        if (!RequestUtil.validateWorkingHours(agentRequest.getRequest(), start, end)) return null; //TODO throw exception
+//        if (!RequestUtil.validateWorkingHours(agentRequest.getRequest(), start, end)) return null; //TODO throw exception
         if (!RequestUtil.validateDeadline(agentRequest.getRequest())) return null; //TODO throw exception
         File offerFile = jasperService.generateImage(offer);
         String imagePath = fileService.upload(offerFile);

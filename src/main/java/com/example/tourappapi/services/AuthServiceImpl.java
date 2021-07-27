@@ -1,12 +1,11 @@
 package com.example.tourappapi.services;
 
-import com.example.tourappapi.dto.LoginPostDto;
-import com.example.tourappapi.dto.LoginResponseDto;
-import com.example.tourappapi.dto.RegisterPostDto;
+import com.example.tourappapi.dto.*;
 import com.example.tourappapi.models.Agent;
 import com.example.tourappapi.models.ConfirmationToken;
 import com.example.tourappapi.repositories.AgentRepository;
 import com.example.tourappapi.repositories.ConfirmationTokenRepository;
+import com.example.tourappapi.services.interfaces.AgentService;
 import com.example.tourappapi.services.interfaces.AuthService;
 import com.example.tourappapi.services.interfaces.EmailService;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
@@ -26,7 +25,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Response;
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -39,19 +40,26 @@ public class AuthServiceImpl implements AuthService {
     private String clientId;
     @Value("${keycloak.credentials.secret}")
     private String clientSecret;
+    @Value("${forgotpassword.url}")
+    private String forgotPasswordUrl;
 
-    AgentRepository userRepository;
+    AgentService service;
     EmailService emailService;
     ConfirmationTokenRepository confirmationTokenRepository;
 
-    public AuthServiceImpl(AgentRepository userRepository,
+    public AuthServiceImpl(AgentService service,
                            EmailService emailService,
                            ConfirmationTokenRepository confirmationTokenRepository){
-        this.userRepository = userRepository;
+        this.service = service;
         this.emailService = emailService;
         this.confirmationTokenRepository = confirmationTokenRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param userDTO
+     * @return
+     */
     @Override
     public String register(RegisterPostDto userDTO) {
         Boolean isRegisteredToKeycloak = registerToKeyclaok(userDTO);
@@ -62,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
             user.setCompanyName(userDTO.getCompanyName());
             user.setAgentName(userDTO.getAgentName());
             user.setVoen(userDTO.getVoen());
-            userRepository.save(user);
+            service.save(user);
             ConfirmationToken confirmationToken = new ConfirmationToken(user);
             confirmationTokenRepository.save(confirmationToken);
             emailService.sendMail(user.getEmail(), "Tour", "Verify account http://localhost:8000/api/v1/users/confirm-account?token=" + confirmationToken.getConfirmationToken());
@@ -71,14 +79,18 @@ public class AuthServiceImpl implements AuthService {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param confirmationToken
+     */
     @Override
     public void confirmAccount(String confirmationToken) {
-        ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
+        ConfirmationToken token = confirmationTokenRepository.getByConfirmationToken(confirmationToken);
         if(token != null)
         {
-            Agent agent = userRepository.getAgentByEmail(token.getAgent().getEmail());
+            Agent agent = service.getByEmail(token.getAgent().getEmail());
             agent.setIsActive(true);
-            userRepository.save(agent);
+            service.save(agent);
             emailService.sendMail(agent.getEmail(), "Congratilations",
                     "You are registered successfully!");
         }
@@ -88,6 +100,11 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param user
+     * @return
+     */
     @Override
     public LoginResponseDto login(LoginPostDto user) {
         Map<String, Object> clientCredentials = new HashMap<>();
@@ -99,6 +116,67 @@ public class AuthServiceImpl implements AuthService {
         AccessTokenResponse response =
                 authzClient.obtainAccessToken(user.getEmail(), user.getPassword());
         return new LoginResponseDto(response.getToken());
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param email
+     */
+    @Override
+    public void forgotPassword(String email) {
+        Agent agent = service.getByEmail(email);
+        if (agent == null) return; //TODO catch exception
+        ConfirmationToken token = new ConfirmationToken(agent);
+        confirmationTokenRepository.save(token);
+        emailService.sendMail(agent.getEmail(), "Tour", "Reset your password" + forgotPasswordUrl + token.getConfirmationToken());
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param dto
+     */
+    @Override
+    public void resetPassword(ResetPasswordDto dto) {
+        ConfirmationToken token = confirmationTokenRepository.getByConfirmationToken(dto.getToken());
+        if (token == null)return; //TODO throw exception
+        if (LocalDateTime.now().isAfter(token.getCreatedDate().plusDays(3))) return; //TODO throw exception
+        Keycloak keycloak = KeycloakBuilder.builder().serverUrl(authServerUrl)
+                .grantType(OAuth2Constants.PASSWORD).realm("master").clientId("admin-cli")
+                .username("nurlan").password("rafet123")
+                .resteasyClient(new ResteasyClientBuilder().connectionPoolSize(10).build()).build();
+        RealmResource realmResource = keycloak.realm(realm);
+        UsersResource usersResource = realmResource.users();
+        List<UserRepresentation> userRepresentations = usersResource.search(token.getAgent().getUsername());
+        UserRepresentation userRepresentation = userRepresentations.stream()
+                .filter(u -> u.getUsername().equals(token.getAgent().getUsername())).findFirst().orElse(null);
+        if (userRepresentation == null) return;; //TODO exception
+        UserResource userResource = usersResource.get(userRepresentation.getId());
+        CredentialRepresentation passwordCred = new CredentialRepresentation();
+        passwordCred.setTemporary(false);
+        passwordCred.setType(CredentialRepresentation.PASSWORD);
+        passwordCred.setValue(dto.getPassword());
+        userResource.resetPassword(passwordCred);
+    }
+
+    @Override
+    public void changePassword(String username, ChangePasswordDto dto) {
+        Keycloak keycloak = KeycloakBuilder.builder().serverUrl(authServerUrl)
+                .grantType(OAuth2Constants.PASSWORD).realm("master").clientId("admin-cli")
+                .username("nurlan").password("rafet123")
+                .resteasyClient(new ResteasyClientBuilder().connectionPoolSize(10).build()).build();
+        RealmResource realmResource = keycloak.realm(realm);
+        UsersResource usersResource = realmResource.users();
+        List<UserRepresentation> userRepresentations = usersResource.search(username);
+        UserRepresentation userRepresentation = userRepresentations.stream()
+                .filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
+        if (userRepresentation == null) return;; //TODO exception
+
+        UserResource userResource = usersResource.get(userRepresentation.getId());
+        CredentialRepresentation passwordCred = new CredentialRepresentation();
+        passwordCred.setTemporary(false);
+        passwordCred.setType(CredentialRepresentation.PASSWORD);
+        passwordCred.setValue(dto.getNewPassword());
+        userResource.resetPassword(passwordCred);
     }
 
     public boolean registerToKeyclaok(RegisterPostDto userDTO){
