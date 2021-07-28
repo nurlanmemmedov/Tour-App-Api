@@ -12,12 +12,10 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginPostDto {
+
     @NotNull(message = "Field cannot be null")
-    @Min(value = 3,message = "Minimum login length is 3")
-    @Max(value = 40,message = "Maximum message length is 40")
     private String email;
+
     @NotNull
-    @Min(value = 3,message = "Minimum login length is 3")
-    @Max(value = 40,message = "Maximum message length is 40")
     private String password;
 }

@@ -13,21 +13,23 @@ public class RegisterPostDto {
     @NotNull(message = "Field cannot be null")
     @Email
     private String email;
-    @NotNull(message = "Name is mandatory")
-    private String username;
-    private String voen;
+
     @NotNull(message = "Field cannot be null")
-    @Min(value = 3,message = "Minimum surname length is 3")
-    @Max(value = 40,message = "Maximum surname length is 40")
+    private String username;
+
+    @NotNull(message = "Field cannot be null")
+    private String voen;
+
+    @NotNull(message = "Field cannot be null")
+    @Min(value = 6, message = "Minimum length is 6")
+    @Max(value = 40, message = "Maximum length is 40")
     private String password;
 
     @NotNull(message = "Field cannot be null")
-    @Min(value = 1,message = "Minimum username length is 1")
-    @Max(value = 100,message = "Maximum username length is 100")
+    @Max(value = 100,message = "Maximum length is 100")
     private String companyName;
 
     @NotNull(message = "Field cannot be null")
-    @Min(value = 1,message = "Minimum username length is 1")
-    @Max(value = 100,message = "Maximum username length is 100")
+    @Max(value = 100,message = "Maximum length is 100")
     private String agentName;
 }

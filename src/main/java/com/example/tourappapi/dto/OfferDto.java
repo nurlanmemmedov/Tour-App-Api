@@ -12,6 +12,7 @@ import java.util.Date;
 @Builder
 @Data
 public class OfferDto {
+
     private String uuid;
     private String path;
     private Integer agentId;

@@ -9,13 +9,16 @@ import com.example.tourappapi.services.interfaces.OfferService;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.FileNotFoundException;
 import java.util.List;
 
 @RequestMapping(value = "/api/v1/requests")
 @RestController
+@Validated
 public class AgentRequestController {
     private AgentRequestService service;
 
@@ -48,7 +51,7 @@ public class AgentRequestController {
     @PostMapping(path = "/{id}/create-offer")
     public ResponseEntity createOffer(@RequestAttribute("user") UserDto userDto,
                                       @PathVariable Integer id,
-                                      @RequestBody OfferPostDto offerPostDto) throws JRException, FileNotFoundException {
+                                      @RequestBody @Valid OfferPostDto offerPostDto) throws JRException, FileNotFoundException {
         offerService.save(userDto.getUsername(), id, offerPostDto);
         return new ResponseEntity(HttpStatus.OK);
     }
