@@ -21,12 +21,22 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<Request> getOfferedRequests(String username) {
-        return dao.getOfferedRequests(username);
+    public Request getById(Integer id){
+        return dao.getById(id);
     }
 
     @Override
     public void updateExpiredRequests() {
         dao.updateExpiredRequests();
+    }
+
+    @Override
+    public Request getByUuid(String uuid) {
+        return dao.getByUuid(uuid);
+    }
+
+    @Override
+    public List<Request> getAllExpiredRequests() {
+        return dao.getAllExpiredRequests();
     }
 }

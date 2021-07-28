@@ -8,6 +8,7 @@ import com.example.tourappapi.models.Request;
 import java.util.List;
 
 public interface AgentRequestService {
+    AgentRequest save(AgentRequest agentRequest);
     void createByRequest(Request request);
     void changeStatus(Integer id, AgentRequestStatus status, String username);
     AgentRequest getById(Integer id);

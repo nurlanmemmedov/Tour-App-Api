@@ -34,6 +34,7 @@ public class RequestListener {
     public void consumeMessageFromQueue(RequestDto requestDto) throws JsonProcessingException {
         System.out.println(requestDto.getAnswers());
         Request request = Request.builder()
+                .isActive(true)
                 .uuid(requestDto.getUuid())
                 .answersJson( new ObjectMapper().writeValueAsString(requestDto.getAnswers())).build();
         request.setDeadline(RequestUtil.getDeadline(start, end , deadline));

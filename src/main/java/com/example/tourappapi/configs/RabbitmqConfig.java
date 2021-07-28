@@ -12,6 +12,9 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitmqConfig {
     public static final String OFFERQUEUE = "offer";
     public static final String QUEUE = "poll";
+    public static final String SELECTION = "selection";
+    public static final String EXPIREDQUEUE = "expired";
+    public static final String STOP = "stop";
     public static final String EXCHANGE = "tour_exchange";
     public static final String ROUTING_KEY = "tour_routingkey";
 
@@ -20,7 +23,6 @@ public class RabbitmqConfig {
     public TopicExchange exchange() {
         return new TopicExchange(EXCHANGE);
     }
-
 
     @Bean
     public MessageConverter converter() {

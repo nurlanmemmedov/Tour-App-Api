@@ -3,20 +3,22 @@ package com.example.tourappapi.services;
 import com.example.tourappapi.dao.interfaces.OfferDao;
 import com.example.tourappapi.dto.OfferDto;
 import com.example.tourappapi.dto.OfferPostDto;
+import com.example.tourappapi.enums.AgentRequestStatus;
 import com.example.tourappapi.exceptions.NotWorkTimeException;
 import com.example.tourappapi.exceptions.RequestInactiveException;
 import com.example.tourappapi.models.Agent;
 import com.example.tourappapi.models.AgentRequest;
 import com.example.tourappapi.models.Offer;
+import com.example.tourappapi.models.Request;
 import com.example.tourappapi.services.interfaces.*;
 import com.example.tourappapi.utils.RequestUtil;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,6 +30,7 @@ public class OfferServiceImpl implements OfferService {
     private AgentService agentService;
     private AgentRequestService agentRequestService;
     private RabbitmqService rabbitmqService;
+    private RequestService requestService;
 
     @Value("${workinghours.start}")
     private Integer start;
@@ -39,13 +42,15 @@ public class OfferServiceImpl implements OfferService {
                             FileService fileService,
                             AgentService agentService,
                             AgentRequestService agentRequestService,
-                            RabbitmqService rabbitmqService){
+                            RabbitmqService rabbitmqService,
+                            RequestService requestService){
         this.dao = dao;
         this.jasperService = jasperService;
         this.fileService = fileService;
         this.agentService = agentService;
         this.agentRequestService = agentRequestService;
         this.rabbitmqService = rabbitmqService;
+        this.requestService = requestService;
     }
 
     @Override
@@ -57,11 +62,12 @@ public class OfferServiceImpl implements OfferService {
         File offerFile = jasperService.generateImage(offer);
         String imagePath = fileService.upload(offerFile);
         Offer created = dao.save(Offer.builder().imagePath(imagePath)
-                .request(agentRequest.getRequest())
-                .agent(agent).build());
+                .agentRequest(agentRequest).isAccepted(false).build());
+        agentRequest.setStatus(AgentRequestStatus.OFFERED);
+        agentRequestService.save(agentRequest);
         rabbitmqService.sendToOfferQueue(OfferDto.builder()
                 .uuid(agentRequest.getRequest().getUuid())
-                .agentId(agent.getId()).path(imagePath).build());
+                .offerId(created.getId()).path(imagePath).build());
         return created;
     }
 
@@ -71,12 +77,25 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public Offer getById(String username, Integer id) {
-        return null;
+    public Offer getById(Integer id) {
+        return dao.getById(id);
     }
 
     @Override
     public List<Offer> getAll(String username) {
         return dao.getAll(username);
+    }
+
+    @Override
+    @Transactional
+    public Boolean acceptOffer(Integer id) {
+        Offer offer = getById(id);
+        offer.setIsAccepted(true);
+        dao.save(offer);
+
+        Request request = requestService.getById(offer.getAgentRequest().getRequest().getId());
+        request.setIsActive(false);
+        requestService.save(request);
+        return true;
     }
 }

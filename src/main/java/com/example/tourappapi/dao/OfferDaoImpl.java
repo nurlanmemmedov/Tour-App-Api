@@ -26,8 +26,8 @@ public class OfferDaoImpl implements OfferDao {
     }
 
     @Override
-    public Offer getById(String username, Integer id) {
-        return null;
+    public Offer getById(Integer id) {
+        return repository.getById(id);
     }
 
     @Override

@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface OfferRepository extends JpaRepository<Offer, Integer> {
-    @Query("SELECT l FROM Offer l WHERE l.agent.username =:username")
+    @Query("SELECT l FROM Offer l WHERE l.agentRequest.agent.username =:username")
     List<Offer> findAll(String username);
 }

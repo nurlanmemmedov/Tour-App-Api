@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface RequestDao {
     Request save(Request request);
-    List<Request> getOfferedRequests(String username);
+    Request getById(Integer id);
+    Request getByUuid(String uuid);
+    List<Request> getAllExpiredRequests();
     void updateExpiredRequests();
 }
