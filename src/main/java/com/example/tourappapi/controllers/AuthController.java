@@ -27,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping(path = "/signin")
-    public ResponseEntity<LoginResponseDto> signin(@RequestBody LoginPostDto loginDto) {
+    public ResponseEntity<LoginResponseDto> signin(@RequestBody @Valid LoginPostDto loginDto) {
         return new ResponseEntity<>(service.login(loginDto), HttpStatus.OK);
     }
 
@@ -44,14 +44,14 @@ public class AuthController {
     }
 
     @RequestMapping("reset-password")
-    public ResponseEntity resetPassword(@RequestBody ResetPasswordDto data){
+    public ResponseEntity resetPassword(@RequestBody @Valid ResetPasswordDto data){
         service.resetPassword(data);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @RequestMapping("change-password")
     public ResponseEntity changePassword(@RequestAttribute UserDto user,
-                                         @RequestBody ChangePasswordDto data){
+                                         @RequestBody @Valid ChangePasswordDto data){
         service.changePassword(user.getUsername(), data);
         return new ResponseEntity(HttpStatus.OK);
     }
