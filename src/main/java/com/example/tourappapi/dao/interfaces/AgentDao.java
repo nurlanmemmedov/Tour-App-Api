@@ -13,6 +13,8 @@ public interface AgentDao {
 
     Agent getByEmail(String email);
 
+    Agent getByVoen(String voen);
+
     void delete(Integer id);
 
     List<Agent> getAll();

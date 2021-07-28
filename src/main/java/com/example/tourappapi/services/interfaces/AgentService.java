@@ -16,4 +16,6 @@ public interface AgentService {
     void delete(Integer id);
 
     List<Agent> getAll();
+
+    Boolean checkIfExists(Agent agent);
 }

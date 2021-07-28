@@ -7,7 +7,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.MethodNotAllowedException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -94,6 +93,30 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleTokenInvalidException(InvalidTokenException ex, WebRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST,
                 ex.getLocalizedMessage(), "Token is invalid");
+        return new ResponseEntity<>(
+                errorMessage, new HttpHeaders(), errorMessage.getStatus());
+    }
+
+    @ExceptionHandler(value = {EmailAlreadyExistsException.class})
+    public ResponseEntity<Object> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex, WebRequest request) {
+        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.CONFLICT,
+                ex.getLocalizedMessage(), "This email is already used.");
+        return new ResponseEntity<>(
+                errorMessage, new HttpHeaders(), errorMessage.getStatus());
+    }
+
+    @ExceptionHandler(value = {UsernameAlreadyExistsException.class})
+    public ResponseEntity<Object> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex, WebRequest request) {
+        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.CONFLICT,
+                ex.getLocalizedMessage(), "This username is already used.");
+        return new ResponseEntity<>(
+                errorMessage, new HttpHeaders(), errorMessage.getStatus());
+    }
+
+    @ExceptionHandler(value = {VoenAlreadyExistsException.class})
+    public ResponseEntity<Object> handleVoenAlreadyExistsException(VoenAlreadyExistsException ex, WebRequest request) {
+        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.CONFLICT,
+                ex.getLocalizedMessage(), "This voen is already used.");
         return new ResponseEntity<>(
                 errorMessage, new HttpHeaders(), errorMessage.getStatus());
     }

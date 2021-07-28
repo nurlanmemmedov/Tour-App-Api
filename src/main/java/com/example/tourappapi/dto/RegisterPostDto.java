@@ -21,15 +21,11 @@ public class RegisterPostDto {
     private String voen;
 
     @NotNull(message = "Field cannot be null")
-    @Min(value = 6, message = "Minimum length is 6")
-    @Max(value = 40, message = "Maximum length is 40")
     private String password;
 
     @NotNull(message = "Field cannot be null")
-    @Max(value = 100,message = "Maximum length is 100")
     private String companyName;
 
     @NotNull(message = "Field cannot be null")
-    @Max(value = 100,message = "Maximum length is 100")
     private String agentName;
 }
