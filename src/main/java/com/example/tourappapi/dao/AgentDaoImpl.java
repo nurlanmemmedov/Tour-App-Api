@@ -37,6 +37,11 @@ public class AgentDaoImpl implements AgentDao {
     }
 
     @Override
+    public Agent getByVoen(String voen) {
+        return repository.getAgentByVoen(voen);
+    }
+
+    @Override
     public void delete(Integer id) {
         repository.deleteById(id);
     }

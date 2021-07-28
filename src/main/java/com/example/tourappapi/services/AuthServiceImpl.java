@@ -63,14 +63,15 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public String register(RegisterPostDto userDTO) {
+        Agent user = new Agent();
+        user.setEmail(userDTO.getEmail());
+        user.setUsername(userDTO.getUsername());
+        user.setCompanyName(userDTO.getCompanyName());
+        user.setAgentName(userDTO.getAgentName());
+        user.setVoen(userDTO.getVoen());
+        service.checkIfExists(user);
         Boolean isRegisteredToKeycloak = registerToKeyclaok(userDTO);
         if (isRegisteredToKeycloak){
-            Agent user = new Agent();
-            user.setEmail(userDTO.getEmail());
-            user.setUsername(userDTO.getUsername());
-            user.setCompanyName(userDTO.getCompanyName());
-            user.setAgentName(userDTO.getAgentName());
-            user.setVoen(userDTO.getVoen());
             service.save(user);
             ConfirmationToken confirmationToken = new ConfirmationToken(user);
             confirmationTokenRepository.save(confirmationToken);

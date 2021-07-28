@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.Query;
 public interface AgentRepository extends JpaRepository<Agent, Integer> {
     Agent getAgentByEmail(String email);
     Agent getAgentByUsername(String email);
+    Agent getAgentByVoen(String voen);
 }

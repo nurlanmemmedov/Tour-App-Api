@@ -13,7 +13,5 @@ public class ChangePasswordDto {
     private String oldPassword;
 
     @NotNull(message = "Field cannot be null")
-    @Min(value = 6, message = "Minimum length is 6")
-    @Max(value = 40, message = "Maximum length is 40")
     private String newPassword;
 }
