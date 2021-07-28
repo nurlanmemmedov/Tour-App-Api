@@ -7,23 +7,25 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "offers")
-public class Offer {
+@Builder
+@Entity
+@Table(name = "client_info")
+public class ClientInfo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "agentrequest_id", referencedColumnName = "id")
-    private AgentRequest agentRequest;
+    @Column(name = "first_name")
+    private String firstName;
 
-    private String imagePath;
+    @Column(name = "last_name")
+    private String lastName;
+    private String username;
 
-    private Boolean isAccepted;
-
+    @Column(name = "contact_information")
+    private String contactInformation;
 }

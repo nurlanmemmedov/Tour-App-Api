@@ -21,12 +21,22 @@ public class RequestDaoImpl implements RequestDao {
     }
 
     @Override
-    public List<Request> getOfferedRequests(String username) {
-        return repository.getOfferedRequests(username);
+    public Request getById(Integer id) {
+        return repository.getById(id);
+    }
+
+    @Override
+    public Request getByUuid(String uuid) {
+        return repository.getByUuid(uuid);
     }
 
     @Override
     public void updateExpiredRequests() {
         repository.updateExpiredRequests();
+    }
+
+    @Override
+    public List<Request> getAllExpiredRequests(){
+        return repository.findAllExpiredRequests();
     }
 }

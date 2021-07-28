@@ -28,5 +28,9 @@ public class AgentRequest {
     @JoinColumn(name = "agent_id", referencedColumnName = "id")
     private Agent agent;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "clientinfo_id", referencedColumnName = "id")
+    private ClientInfo clientInfo;
+
     private AgentRequestStatus status;
 }

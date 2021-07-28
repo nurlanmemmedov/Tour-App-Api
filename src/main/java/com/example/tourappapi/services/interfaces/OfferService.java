@@ -12,7 +12,9 @@ public interface OfferService {
 
     void delete(String username, Integer id);
 
-    Offer getById(String username, Integer id);
+    Offer getById(Integer id);
 
     List<Offer> getAll(String username);
+
+    Boolean acceptOffer(Integer id);
 }

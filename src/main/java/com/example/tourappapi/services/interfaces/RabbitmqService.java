@@ -9,10 +9,14 @@ import com.example.tourappapi.models.Request;
  */
 public interface RabbitmqService {
     /**
-     * pushes uuid to stop queue in rabbitmq
+     * pushes offer to offer queue in rabbitmq
      * @param offer
      */
     void sendToOfferQueue(OfferDto offer);
 
-    void sendToRequestQueue(Request request);
+    /**
+     * pushes uuid to expired queue in rabbitmq
+     * @param uuid
+     */
+    void sendToExpiredQueue(String uuid);
 }

@@ -27,8 +27,12 @@ public class RabbitmqServiceImpl implements RabbitmqService {
         template.convertAndSend(RabbitmqConfig.OFFERQUEUE, offer);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param uuid
+     */
     @Override
-    public void sendToRequestQueue(Request request) {
-        template.convertAndSend(RabbitmqConfig.QUEUE, request);
+    public void sendToExpiredQueue(String uuid) {
+        template.convertAndSend(RabbitmqConfig.EXPIREDQUEUE, uuid);
     }
 }

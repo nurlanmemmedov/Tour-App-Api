@@ -23,6 +23,11 @@ public class AgentRequestServiceImpl implements AgentRequestService {
     }
 
     @Override
+    public AgentRequest save(AgentRequest agentRequest) {
+        return dao.save(agentRequest);
+    }
+
+    @Override
     public void createByRequest(Request request) {
         List<Agent> agents = agentService.getAll();
         agents.stream().forEach(a -> dao.save(AgentRequest.builder()
