@@ -67,6 +67,6 @@ public class AgentServiceImpl implements AgentService {
         }else if(dao.getByVoen(agent.getVoen())!=null){
             throw new VoenAlreadyExistsException();
         }
-        return true;
+        return false;
     }
 }
