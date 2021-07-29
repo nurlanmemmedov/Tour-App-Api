@@ -1,13 +1,7 @@
 package com.example.tourappapi.services;
 
-import com.example.tourappapi.enums.AgentRequestStatus;
-import com.example.tourappapi.models.Agent;
-import com.example.tourappapi.models.AgentRequest;
 import com.example.tourappapi.models.Request;
-import com.example.tourappapi.repositories.AgentRepository;
-import com.example.tourappapi.repositories.AgentRequestRepository;
 import com.example.tourappapi.repositories.RequestRepository;
-import com.example.tourappapi.services.interfaces.AgentRequestService;
 import com.example.tourappapi.services.interfaces.RequestService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,14 +41,6 @@ public class RequestServiceImplTest {
         Assertions.assertEquals(service.getAllExpiredRequests().size(), requestRepository.findAllExpiredRequests().size());
     }
 
-//    @Test
-//    @Order(3)
-//    @Transactional
-//    @DisplayName("RequestService -> Update All expired requests")
-//    void updateAllExpiredRequests() {
-//        service.updateExpiredRequests();
-//        Assertions.assertEquals(requestRepository.findAllExpiredRequests(), 0);
-//    }
 
     @Test
     @Order(4)

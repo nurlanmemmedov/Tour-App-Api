@@ -69,24 +69,25 @@ class AgentRequestServiceImplTest {
 
     }
 
-//    @Test
-//    @Order(5)
-//    @Transactional
-//    @DisplayName("AgentRequestService -> Get AgentRequest By Id")
-//    void getById() {
-//        Assertions.assertEquals(agentRequestService.getById(3).getRequest().getUuid(), "1f6feuc2-aayc-45c4-kdeb-as91afd7c076");
-//
-//    }
-//
-//
-//    @Test
-//    @Order(6)
-//    @Transactional
-//    @DisplayName("AgentRequestService -> Change Status")
-//    void changeStatus() {
-//        agentRequestService.changeStatus(1, AgentRequestStatus.ARCHIVED, "nurlanm");
-//        Assertions.assertEquals(agentRequestRepository.getById(1).getStatus(), AgentRequestStatus.ARCHIVED);
-//    }
+    @Test
+    @Order(5)
+    @Transactional
+    @DisplayName("AgentRequestService -> Get AgentRequest By Id")
+    void getById() {
+        AgentRequest agentRequest = agentRequestRepository.findAll().stream().findFirst().orElse(null);
+        Assertions.assertEquals(agentRequestService.getById(agentRequest.getId()).getRequest().getUuid(), agentRequest.getRequest().getUuid());
+    }
+
+
+    @Test
+    @Order(6)
+    @Transactional
+    @DisplayName("AgentRequestService -> Change Status")
+    void changeStatus() {
+        AgentRequest agentRequest = agentRequestRepository.findAll().stream().findFirst().orElse(null);
+        agentRequestService.changeStatus(agentRequest.getId(), AgentRequestStatus.ARCHIVED, "nurlanm");
+        Assertions.assertEquals(agentRequestRepository.getById(agentRequest.getId()).getStatus(), AgentRequestStatus.ARCHIVED);
+    }
 
     @Test
     @Order(7)
