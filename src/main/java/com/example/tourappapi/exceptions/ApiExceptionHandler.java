@@ -124,7 +124,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {RequestInactiveException.class})
     public ResponseEntity<Object> handleRequestInactiveException(RequestInactiveException ex, WebRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST,
-                ex.getLocalizedMessage(), "Request is inactive");
+                ex.getLocalizedMessage(), "Request is inactive or expired");
+        return new ResponseEntity<>(
+                errorMessage, new HttpHeaders(), errorMessage.getStatus());
+    }
+
+    @ExceptionHandler(value = {RequestIsArchivedException.class})
+    public ResponseEntity<Object> handleRequestIsArchivedException(RequestIsArchivedException ex, WebRequest request) {
+        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST,
+                ex.getLocalizedMessage(), "Request is archived");
         return new ResponseEntity<>(
                 errorMessage, new HttpHeaders(), errorMessage.getStatus());
     }
@@ -153,6 +161,25 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 errorMessage, new HttpHeaders(), errorMessage.getStatus());
     }
 
+    @ExceptionHandler(value = {UserRequestNotFoundException.class})
+    public ResponseEntity<Object> handleUserRequestNotFoundException(UserRequestNotFoundException ex,
+                                                                     WebRequest request) {
+        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.NOT_FOUND,
+                ex.getLocalizedMessage(), "Can't find user request with this id.");
+        return new ResponseEntity<>(
+                errorMessage, new HttpHeaders(), errorMessage.getStatus());
+    }
+
+
+    @ExceptionHandler(value = {AlreadyHaveOfferException.class})
+    public ResponseEntity<Object> handleAlreadyHaveOfferException(AlreadyHaveOfferException ex,
+                                                                     WebRequest request) {
+        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.CONFLICT,
+                ex.getLocalizedMessage(), "You already have an offer for this request.");
+        return new ResponseEntity<>(
+                errorMessage, new HttpHeaders(), errorMessage.getStatus());
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -164,5 +191,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+
 
 }
