@@ -36,6 +36,7 @@ public class AgentServiceImpl implements AgentService {
 
     @Override
     public Agent getByUsername(String username) {
+        System.out.println(username);
         Agent agent = dao.getByUsername(username);
         if (agent == null) throw new UserNotFoundException();
         return agent;
