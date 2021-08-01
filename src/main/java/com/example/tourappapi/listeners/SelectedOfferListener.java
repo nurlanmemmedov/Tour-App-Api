@@ -3,6 +3,7 @@ package com.example.tourappapi.listeners;
 import com.example.tourappapi.configs.RabbitmqConfig;
 import com.example.tourappapi.dto.RequestDto;
 import com.example.tourappapi.dto.SelectedOfferDto;
+import com.example.tourappapi.enums.AgentRequestStatus;
 import com.example.tourappapi.models.AgentRequest;
 import com.example.tourappapi.models.ClientInfo;
 import com.example.tourappapi.models.Offer;
@@ -35,7 +36,6 @@ public class SelectedOfferListener {
     @RabbitListener(queues = RabbitmqConfig.SELECTION)
     @Transactional
     public void consumeMessageFromQueue(SelectedOfferDto selection) throws JsonProcessingException {
-        System.out.println(selection);
         ClientInfo clientInfo = service.save(ClientInfo.builder()
                 .firstName(selection.getName())
                 .lastName(selection.getSurname())
@@ -43,7 +43,6 @@ public class SelectedOfferListener {
                 .contactInformation(selection.getContactInfo()).build());
         Offer offer = offerService.getById(selection.getOfferId());
         offerService.acceptOffer(offer.getId());
-
         AgentRequest agentRequest = agentRequestService.getById(offer.getAgentRequest().getId());
         agentRequest.setClientInfo(clientInfo);
         agentRequestService.save(agentRequest);

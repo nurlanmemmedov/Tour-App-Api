@@ -5,12 +5,11 @@ import com.example.tourappapi.models.Offer;
 import net.sf.jasperreports.engine.JRException;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 public interface OfferService {
-    Offer save(String username, Integer id , OfferPostDto offer) throws JRException, FileNotFoundException;
-
-    void delete(String username, Integer id);
+    Offer save(String username, Integer id , OfferPostDto offer) throws JRException, IOException;
 
     Offer getById(Integer id);
 

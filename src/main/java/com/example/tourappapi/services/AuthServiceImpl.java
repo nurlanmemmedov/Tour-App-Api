@@ -109,6 +109,11 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public LoginResponseDto login(LoginPostDto user) {
+        try {
+            service.getByEmail(user.getEmail());
+        }catch (Exception e){
+            throw new LoginException();
+        }
         Map<String, Object> clientCredentials = new HashMap<>();
         clientCredentials.put("secret", clientSecret);
         clientCredentials.put("grant_type", "password");
@@ -197,7 +202,6 @@ public class AuthServiceImpl implements AuthService {
         UsersResource usersResource = realmResource.users();
         Response response = usersResource.create(user);
         keycloak.tokenManager().getAccessToken();
-        System.out.println(response.getStatus());
         if (response.getStatus() == 201) {
             String userId = CreatedResponseUtil.getCreatedId(response);
             CredentialRepresentation passwordCred = new CredentialRepresentation();

@@ -84,14 +84,14 @@ class OfferServiceImplTest {
         requestRepository.saveAllAndFlush(requests);
 
         List<AgentRequest> agentRequests = new ArrayList<>();
-        agentRequests.add(AgentRequest.builder().agent(agents.get(0)).request(requests.get(0)).status(AgentRequestStatus.ACTIVE).build());
-        agentRequests.add(AgentRequest.builder().agent(agents.get(1)).request(requests.get(0)).status(AgentRequestStatus.ARCHIVED).build());
-        agentRequests.add(AgentRequest.builder().agent(agents.get(2)).request(requests.get(0)).status(AgentRequestStatus.OFFERED).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(0)).request(requests.get(0)).status(AgentRequestStatus.NEWREQUEST).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(1)).request(requests.get(0)).status(AgentRequestStatus.ACCEPTED).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(2)).request(requests.get(0)).status(AgentRequestStatus.OFFERMADE).build());
 
         List<Offer> offers = new ArrayList<>();
-        offers.add(Offer.builder().imagePath("https://image").agentRequest(agentRequests.get(0)).isAccepted(false).build());
-        offers.add(Offer.builder().imagePath("https://image").agentRequest(agentRequests.get(1)).isAccepted(false).build());
-        offers.add(Offer.builder().imagePath("https://image").agentRequest(agentRequests.get(2)).isAccepted(false).build());
+        offers.add(Offer.builder().agentRequest(agentRequests.get(0)).isAccepted(false).build());
+        offers.add(Offer.builder().agentRequest(agentRequests.get(1)).isAccepted(false).build());
+        offers.add(Offer.builder().agentRequest(agentRequests.get(2)).isAccepted(false).build());
 
         agentRequestRepository.saveAllAndFlush(agentRequests);
     }

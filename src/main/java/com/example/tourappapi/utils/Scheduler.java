@@ -26,6 +26,7 @@ public class Scheduler {
 
     @Scheduled(fixedRateString =  "${expiration.check.millisecond}")
     public void expireRequests() {
+        System.out.println("AAAAAAAAAAA");
         try {
             List<Request> requests = service.getAllExpiredRequests();
             requests.stream().forEach(r -> rabbitmqService.sendToExpiredQueue(r.getUuid()));

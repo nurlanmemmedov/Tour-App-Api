@@ -2,6 +2,7 @@ package com.example.tourappapi.services;
 
 import com.example.tourappapi.dao.interfaces.RequestDao;
 import com.example.tourappapi.models.Request;
+import com.example.tourappapi.services.interfaces.AgentRequestService;
 import com.example.tourappapi.services.interfaces.RequestService;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +11,11 @@ import java.util.List;
 @Service
 public class RequestServiceImpl implements RequestService {
     private RequestDao dao;
+    private AgentRequestService agentRequestService;
 
-    public RequestServiceImpl(RequestDao dao){
+    public RequestServiceImpl(RequestDao dao, AgentRequestService agentRequestService){
         this.dao = dao;
+        this.agentRequestService = agentRequestService;
     }
 
     @Override
@@ -27,6 +30,8 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public void updateExpiredRequests() {
+        List<Request> expiredRequests = getAllExpiredRequests();
+        expiredRequests.forEach(r -> agentRequestService.expireAgentRequests(r.getId()));
         dao.updateExpiredRequests();
     }
 

@@ -1,6 +1,7 @@
 package com.example.tourappapi.services.interfaces;
 
 import com.example.tourappapi.dto.OfferPostDto;
+import com.example.tourappapi.models.Offer;
 import net.sf.jasperreports.engine.JRException;
 
 import java.io.File;
@@ -15,5 +16,5 @@ public interface JasperService {
      * @throws FileNotFoundException
      * @throws JRException
      */
-    File generateImage(OfferPostDto offer) throws FileNotFoundException, JRException;
+    File generateImage(Offer offer) throws FileNotFoundException, JRException;
 }
