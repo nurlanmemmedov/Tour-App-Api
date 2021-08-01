@@ -1,6 +1,7 @@
 package com.example.tourappapi.services;
 
 import com.example.tourappapi.dto.OfferPostDto;
+import com.example.tourappapi.models.Offer;
 import com.example.tourappapi.services.interfaces.JasperService;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -25,7 +26,7 @@ public class JasperServiceImpl implements JasperService {
      * @throws JRException
      */
     @Override
-    public File generateImage(OfferPostDto offer) throws FileNotFoundException, JRException {
+    public File generateImage(Offer offer) throws FileNotFoundException, JRException {
 
         File file = ResourceUtils.getFile("classpath:offers.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());

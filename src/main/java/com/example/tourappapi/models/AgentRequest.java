@@ -1,6 +1,7 @@
 package com.example.tourappapi.models;
 
 import com.example.tourappapi.enums.AgentRequestStatus;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,8 +30,15 @@ public class AgentRequest {
     private Agent agent;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @JoinColumn(name = "offer_id", referencedColumnName = "id")
+    private Offer offer;
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "clientinfo_id", referencedColumnName = "id")
     private ClientInfo clientInfo;
 
     private AgentRequestStatus status;
+
+    private Boolean isArchived;
 }
