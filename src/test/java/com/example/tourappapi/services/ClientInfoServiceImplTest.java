@@ -26,7 +26,7 @@ class ClientInfoServiceImplTest {
     @Test
     @Order(1)
     @Transactional
-    @DisplayName("AgentService -> Save")
+    @DisplayName("ClientInfoService -> Save")
     void save() {
         service.save(ClientInfo.builder().firstName("Test").lastName("Test").username("test123")
                 .contactInformation("email@email1.com").build());

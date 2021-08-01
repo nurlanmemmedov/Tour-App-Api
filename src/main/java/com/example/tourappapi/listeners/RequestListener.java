@@ -32,7 +32,6 @@ public class RequestListener {
 
     @RabbitListener(queues = RabbitmqConfig.QUEUE)
     public void consumeMessageFromQueue(RequestDto requestDto) throws JsonProcessingException {
-        System.out.println(requestDto.getAnswers());
         Request request = Request.builder()
                 .isActive(true)
                 .uuid(requestDto.getUuid())

@@ -10,10 +10,14 @@ import com.example.tourappapi.models.Request;
 import com.example.tourappapi.services.interfaces.AgentRequestService;
 import com.example.tourappapi.services.interfaces.AgentService;
 import com.example.tourappapi.utils.modelmapper.Mapper;
+import com.example.tourappapi.utils.pagination.Paging;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.example.tourappapi.utils.pagination.PagingUtil.getResult;
 
 @Service
 public class AgentRequestServiceImpl implements AgentRequestService {
@@ -69,23 +73,39 @@ public class AgentRequestServiceImpl implements AgentRequestService {
     }
 
     @Override
-    public List<AgentRequestDto> findByStatus(String status, String username) {
-        return dao.getAllByStatus(AgentRequestStatus.valueOf(status), username)
-                .stream().map(a -> mapper.convertOneDim(a, AgentRequestDto.class))
-                .collect(Collectors.toList());
+    public Paging<AgentRequestDto> findByStatus(String status, String username, Integer index, Integer size) {
+        Page<AgentRequest> agentRequests = dao.getAllByStatus(AgentRequestStatus.valueOf(status), username, index, size);
+        return new Paging<AgentRequestDto>().toBuilder()
+                .pageCount((long) agentRequests.getTotalPages())
+                .total(agentRequests.getTotalElements())
+                .items(getResult(agentRequests).stream()
+                        .map(a -> mapper.convertOneDim(a, AgentRequestDto.class))
+                        .collect(Collectors.toList()))
+                .build();
     }
 
     @Override
-    public List<AgentRequestDto> getArchivedRequests(String username) {
-        return dao.getArchivedRequests(username).stream()
-                .map(a -> mapper.convertOneDim(a, AgentRequestDto.class))
-                .collect(Collectors.toList());
+    public Paging<AgentRequestDto> getArchivedRequests(String username, Integer index, Integer size) {
+        Page<AgentRequest> agentRequests = dao.getArchivedRequests(username, index, size);
+        return new Paging<AgentRequestDto>().toBuilder()
+                .pageCount((long) agentRequests.getTotalPages())
+                .total(agentRequests.getTotalElements())
+                .items(getResult(agentRequests).stream()
+                        .map(a -> mapper.convertOneDim(a, AgentRequestDto.class))
+                        .collect(Collectors.toList()))
+                .build();
     }
 
     @Override
-    public List<AgentRequestDto> getAll(String username) {
-        return dao.getAll(username).stream()
-                .map(a -> mapper.convertOneDim(a, AgentRequestDto.class)).collect(Collectors.toList());
+    public Paging<AgentRequestDto> getAll(String username, Integer index, Integer size) {
+        Page<AgentRequest> agentRequests = dao.getAll(username, index, size);
+        return new Paging<AgentRequestDto>().toBuilder()
+                .pageCount((long) agentRequests.getTotalPages())
+                .total(agentRequests.getTotalElements())
+                .items(getResult(agentRequests).stream()
+                        .map(a -> mapper.convertOneDim(a, AgentRequestDto.class))
+                        .collect(Collectors.toList()))
+                .build();
     }
 
     @Override

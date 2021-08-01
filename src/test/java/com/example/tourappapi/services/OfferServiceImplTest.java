@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 @TestInstance(PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SuppressWarnings("SpellCheckingInspection")
-class OfferServiceImplTest {
+public class OfferServiceImplTest {
 
     @Autowired
     private OfferService service;
@@ -93,7 +93,7 @@ class OfferServiceImplTest {
         offers.add(Offer.builder().agentRequest(agentRequests.get(1)).isAccepted(false).build());
         offers.add(Offer.builder().agentRequest(agentRequests.get(2)).isAccepted(false).build());
 
-        agentRequestRepository.saveAllAndFlush(agentRequests);
+        agentRequestRepository.saveAll(agentRequests);
     }
 
 
