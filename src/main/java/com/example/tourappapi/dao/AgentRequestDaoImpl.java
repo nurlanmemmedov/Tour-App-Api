@@ -5,9 +5,13 @@ import com.example.tourappapi.dto.AgentRequestDto;
 import com.example.tourappapi.enums.AgentRequestStatus;
 import com.example.tourappapi.models.AgentRequest;
 import com.example.tourappapi.repositories.AgentRequestRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static com.example.tourappapi.utils.pagination.PagingUtil.preparePage;
 
 @Component
 public class AgentRequestDaoImpl implements AgentRequestDao {
@@ -35,8 +39,9 @@ public class AgentRequestDaoImpl implements AgentRequestDao {
     }
 
     @Override
-    public List<AgentRequest> getArchivedRequests(String username) {
-        return repository.getArchivedRequests(username);
+    public Page<AgentRequest> getArchivedRequests(String username, Integer index, Integer size) {
+        Pageable paging = preparePage(index, size);
+        return repository.getArchivedRequests(username, paging);
     }
 
     @Override
@@ -45,13 +50,15 @@ public class AgentRequestDaoImpl implements AgentRequestDao {
     }
 
     @Override
-    public List<AgentRequest> getAllByStatus(AgentRequestStatus status, String username) {
-        return repository.findAllByStatus(status, username);
+    public Page<AgentRequest> getAllByStatus(AgentRequestStatus status, String username, Integer index, Integer size) {
+        Pageable paging = preparePage(index, size);
+        return repository.findAllByStatus(status, username, paging);
     }
 
     @Override
-    public List<AgentRequest> getAll(String username) {
-        return repository.findAll(username);
+    public Page<AgentRequest> getAll(String username, Integer index, Integer size) {
+        Pageable paging = preparePage(index, size);
+        return repository.findAll(username, paging);
     }
 
     @Override

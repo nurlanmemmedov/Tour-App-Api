@@ -16,18 +16,22 @@ class RequestUtilTest {
     @Test
     @DisplayName("Test should pass when deadline calculated correctly")
     void getDeadline(){
-        int start = 10;
-        int end = 18;
-        int deadline = 8;
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime calculated = LocalDateTime.now();
-        Integer left = end - now.getHour();
-        if (left >8){
-            calculated = now.withHour(start + deadline);
-        }else {
-            calculated = now.plusDays(1).withHour(start + deadline - left);
+        int workStart = 10;
+        int workEnd = 18;
+        int expireTime = 8;
+
+        LocalDateTime end = LocalDateTime.now().withHour(workEnd).withMinute(0).withSecond(0);
+
+        LocalDateTime calc = LocalDateTime.now();
+        if (workEnd == 0) workEnd = 24;
+        if (calc.isAfter(end)) calc = calc.plusDays(1).withHour(workStart).withMinute(0).withSecond(0);
+
+        while (expireTime >= workEnd - calc.getHour()){
+            expireTime -= workEnd - calc.getHour();
+            calc = calc.plusDays(1).withHour(workStart);
         }
-        Assertions.assertEquals(RequestUtil.getDeadline(start, end, deadline).getHour(), calculated.getHour());
+        calc = calc.plusHours(expireTime);
+        Assertions.assertEquals(RequestUtil.getDeadline(workStart, workEnd, expireTime).getHour(), calc.getHour());
     }
 
     @Test

@@ -7,6 +7,7 @@ import com.example.tourappapi.enums.AgentRequestStatus;
 import com.example.tourappapi.models.AgentRequest;
 import com.example.tourappapi.services.interfaces.AgentRequestService;
 import com.example.tourappapi.services.interfaces.OfferService;
+import com.example.tourappapi.utils.pagination.Paging;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,19 +34,25 @@ public class AgentRequestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AgentRequestDto>> getAll(@RequestAttribute("user") UserDto userDto){
-        return new ResponseEntity<List<AgentRequestDto>>(service.getAll(userDto.getUsername()), HttpStatus.OK);
+    public ResponseEntity<Paging<AgentRequestDto>> getAll(@RequestAttribute("user") UserDto userDto,
+                                                          @RequestParam(required = false, defaultValue = "10") int size,
+                                                          @RequestParam(required = false, defaultValue = "1") int index){
+        return new ResponseEntity<Paging<AgentRequestDto>>(service.getAll(userDto.getUsername(), index, size), HttpStatus.OK);
     }
 
     @GetMapping("/status")
-    public ResponseEntity<List<AgentRequestDto>> getAllByStatus(@RequestAttribute("user") UserDto userDto,
-                                                             @RequestParam String status){
-        return new ResponseEntity<List<AgentRequestDto>>(service.findByStatus(status, userDto.getUsername()), HttpStatus.OK);
+    public ResponseEntity<Paging<AgentRequestDto>> getAllByStatus(@RequestAttribute("user") UserDto userDto,
+                                                                @RequestParam String status,
+                                                                @RequestParam(required = false, defaultValue = "10") int size,
+                                                                @RequestParam(required = false, defaultValue = "1") int index){
+        return new ResponseEntity<Paging<AgentRequestDto>>(service.findByStatus(status, userDto.getUsername(), index, size), HttpStatus.OK);
     }
 
     @GetMapping("/archived")
-    public ResponseEntity<List<AgentRequestDto>> getAllByStatus(@RequestAttribute("user") UserDto userDto){
-        return new ResponseEntity<List<AgentRequestDto>>(service.getArchivedRequests(userDto.getUsername()), HttpStatus.OK);
+    public ResponseEntity<Paging<AgentRequestDto>> getAllByStatus(@RequestAttribute("user") UserDto userDto,
+                                                                  @RequestParam(required = false, defaultValue = "10") int size,
+                                                                  @RequestParam(required = false, defaultValue = "1") int index){
+        return new ResponseEntity<Paging<AgentRequestDto>>(service.getArchivedRequests(userDto.getUsername(), index, size), HttpStatus.OK);
     }
 
     @PutMapping(path = "/{id}/archive")

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 @SpringBootTest
@@ -41,7 +42,8 @@ class AgentRequestServiceImplTest {
     @Order(1)
     @DisplayName("AgentRequestService -> get AgentRequests -> ACTIVE")
     void getActiveRequests() {
-        Assertions.assertEquals(agentRequestService.findByStatus("NEWREQUEST", "nurlanm").size(), 2);
+        Assertions.assertEquals(agentRequestService
+                .findByStatus("NEWREQUEST", "nurlanm",1, 10).getItems().size(), 2);
 
     }
 
@@ -49,7 +51,8 @@ class AgentRequestServiceImplTest {
     @Order(2)
     @DisplayName("AgentRequestService -> get AgentRequests -> OFFERED")
     void getOfferedRequests() {
-        Assertions.assertEquals(agentRequestService.findByStatus("OFFERMADE", "nurlanm").size(), 2);
+        Assertions.assertEquals(agentRequestService.
+                findByStatus("OFFERMADE", "nurlanm", 1, 10).getItems().size(), 2);
 
     }
 
@@ -57,7 +60,8 @@ class AgentRequestServiceImplTest {
     @Order(3)
     @DisplayName("AgentRequestService -> get AgentRequests -> ACCEPTED")
     void getArchievedRequests() {
-        Assertions.assertEquals(agentRequestService.findByStatus("ACCEPTED", "username").size(), 2);
+        Assertions.assertEquals(agentRequestService
+                .findByStatus("ACCEPTED", "username",1, 10).getItems().size(), 2);
 
     }
 
@@ -65,7 +69,8 @@ class AgentRequestServiceImplTest {
     @Order(4)
     @DisplayName("AgentRequestService -> getAgentRequests -> ALL")
     void getAllRequests() {
-        Assertions.assertEquals(agentRequestService.getAll("nurlanm").size(), 4);
+        Assertions.assertEquals(agentRequestService
+                .getAll("nurlanm",1,10).getItems().size(), 4);
 
     }
 
@@ -128,7 +133,6 @@ class AgentRequestServiceImplTest {
         agentRequests.add(AgentRequest.builder().agent(agents.get(0)).request(requests.get(3)).status(AgentRequestStatus.NEWREQUEST).build());
         agentRequests.add(AgentRequest.builder().agent(agents.get(1)).request(requests.get(3)).status(AgentRequestStatus.ACCEPTED).build());
         agentRequests.add(AgentRequest.builder().agent(agents.get(2)).request(requests.get(3)).status(AgentRequestStatus.OFFERMADE).build());
-
         agentRequestRepository.saveAllAndFlush(agentRequests);
     }
 
