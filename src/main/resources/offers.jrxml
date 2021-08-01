@@ -140,10 +140,10 @@ There are two flowers, the first one is printed only starting from the second pa
         <band height="300" splitType="Stretch">
 
             <frame>
-                <reportElement uuid="314bfd5b-7b0a-42f4-aca3-e61f0283f126" positionType="Float" x="213" y="21" width="243" height="20"/>
+                <reportElement uuid="314bfd5b-7b0a-42f4-aca3-e61f0283f126" positionType="Float" x="213" y="41" width="300" height="40"/>
                 <staticText>
                     <reportElement uuid="e07201bb-a677-4dc9-a332-f94e6eca2722" positionType="Float" x="0" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
-                    <textElement/>
+                    <textElement />
                     <text><![CDATA[Start Date]]></text>
                 </staticText>
                 <textField isStretchWithOverflow="true">
@@ -153,7 +153,7 @@ There are two flowers, the first one is printed only starting from the second pa
                 </textField>
             </frame>
             <frame>
-                <reportElement uuid="314bfd5b-7b0a-42f4-aca3-e61f0283f126" positionType="Float" x="213" y="51" width="243" height="20"/>
+                <reportElement uuid="314bfd5b-7b0a-42f4-aca3-e61f0283f126" positionType="Float" x="213" y="81" width="300" height="40"/>
                 <staticText>
                     <reportElement uuid="e07201bb-a677-4dc9-a332-f94e6eca2722" positionType="Float" x="0" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
                     <textElement/>
@@ -166,7 +166,7 @@ There are two flowers, the first one is printed only starting from the second pa
                 </textField>
             </frame>
             <frame>
-                <reportElement uuid="314bfd5b-7b0a-42f4-aca3-e61f0283f126" positionType="Float" x="213" y="81" width="243" height="20"/>
+                <reportElement uuid="314bfd5b-7b0a-42f4-aca3-e61f0283f126" positionType="Float" x="213" y="121" width="300" height="40"/>
                 <staticText>
                     <reportElement uuid="e07201bb-a677-4dc9-a332-f94e6eca2722" positionType="Float" x="0" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
                     <textElement/>
@@ -179,7 +179,7 @@ There are two flowers, the first one is printed only starting from the second pa
                 </textField>
             </frame>
             <frame>
-                <reportElement uuid="8311a483-955e-4280-a9ac-513d7d34495b" positionType="Float" x="213" y="111" width="243" height="20"/>
+                <reportElement uuid="8311a483-955e-4280-a9ac-513d7d34495b" positionType="Float" x="213" y="161" width="300" height="40"/>
                 <staticText>
                     <reportElement uuid="da404b4e-7908-40ae-8e1b-38e19d9ddc7f" positionType="Float" x="0" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
                     <textElement/>
@@ -192,7 +192,7 @@ There are two flowers, the first one is printed only starting from the second pa
                 </textField>
             </frame>
             <frame>
-                <reportElement uuid="8ff2baf9-b0ec-4c8a-b54a-9edd08b200cc" positionType="Float" x="213" y="141" width="243" height="20"/>
+                <reportElement uuid="8ff2baf9-b0ec-4c8a-b54a-9edd08b200cc" positionType="Float" x="213" y="201" width="300" height="40"/>
                 <staticText>
                     <reportElement uuid="b8d97db0-250a-43c8-a2f3-2fa3668c5d15" positionType="Float" x="0" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
                     <textElement/>
@@ -205,7 +205,7 @@ There are two flowers, the first one is printed only starting from the second pa
                 </textField>
             </frame>
             <frame>
-                <reportElement uuid="8ff2baf9-b0ec-4c8a-b54a-9edd08b200cc" positionType="Float" x="213" y="171" width="243" height="20"/>
+                <reportElement uuid="8ff2baf9-b0ec-4c8a-b54a-9edd08b200cc" positionType="Float" x="213" y="241" width="300" height="40"/>
                 <staticText>
                     <reportElement uuid="b8d97db0-250a-43c8-a2f3-2fa3668c5d15" positionType="Float" x="0" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
                     <textElement/>
@@ -219,34 +219,11 @@ There are two flowers, the first one is printed only starting from the second pa
             </frame>
         </band>
     </detail>
-    <columnFooter>
-        <band height="7" splitType="Stretch">
-            <line>
-                <reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="c23ffbf7-1928-41f8-ade3-5930d9a4871d"/>
-                <graphicElement>
-                    <pen lineWidth="0.5" lineColor="#999999"/>
-                </graphicElement>
-            </line>
-        </band>
-    </columnFooter>
     <pageFooter>
         <band height="16" splitType="Stretch">
             <frame>
                 <reportElement mode="Opaque" x="2" y="0" width="800" height="16" forecolor="#D0B48E" backcolor="#006699" uuid="6f4fe8ef-88ca-4d5d-b46a-054826bb7893"/>
-                <textField evaluationTime="Report">
-                    <reportElement style="Column header" x="753" y="0" width="40" height="16" forecolor="#FFFFFF" uuid="970781d6-87a0-4d3d-a07b-5ae173a1317a"/>
-                    <textElement verticalAlignment="Middle">
-                        <font fontName="Arial" size="12" isBold="false"/>
-                    </textElement>
-                    <textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-                </textField>
-                <textField>
-                    <reportElement style="Column header" x="673" y="0" width="80" height="16" forecolor="#FFFFFF" uuid="42664b34-c87b-42f8-911b-bd9c2ab9111e"/>
-                    <textElement textAlignment="Right" verticalAlignment="Middle">
-                        <font fontName="Arial" size="12" isBold="false"/>
-                    </textElement>
-                    <textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
-                </textField>
+
                 <textField pattern="EEEEE dd MMMMM yyyy">
                     <reportElement style="Column header" x="2" y="0" width="197" height="16" forecolor="#FFFFFF" uuid="06b3d6e8-b4a5-4251-b1fb-f640689933e8"/>
                     <textElement verticalAlignment="Middle">

@@ -13,6 +13,6 @@ import java.util.Date;
 @Data
 public class OfferDto {
     private String uuid;
-    private String path;
+    private byte[] image;
     private Integer offerId;
 }
