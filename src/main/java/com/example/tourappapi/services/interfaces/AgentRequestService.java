@@ -1,7 +1,9 @@
 package com.example.tourappapi.services.interfaces;
 
 import com.example.tourappapi.dao.interfaces.AgentRequestDao;
+import com.example.tourappapi.dto.AgentRequestDto;
 import com.example.tourappapi.enums.AgentRequestStatus;
+import com.example.tourappapi.models.Agent;
 import com.example.tourappapi.models.AgentRequest;
 import com.example.tourappapi.models.Request;
 
@@ -10,8 +12,12 @@ import java.util.List;
 public interface AgentRequestService {
     AgentRequest save(AgentRequest agentRequest);
     void createByRequest(Request request);
-    void changeStatus(Integer id, AgentRequestStatus status, String username);
+    boolean toggleArchived(Integer id, String username);
     AgentRequest getById(Integer id);
-    List<AgentRequest> findByStatus(String status, String username);
-    List<AgentRequest> getAll(String username);
+    AgentRequest getByIdAndUsername(Integer id, String username);
+    List<AgentRequestDto> findByStatus(String status, String username);
+    List<AgentRequestDto> getArchivedRequests(String username);
+    List<AgentRequestDto> getAll(String username);
+    List<AgentRequest> getAllByRequestId(Integer id);
+    void expireAgentRequests(Integer requestId);
 }

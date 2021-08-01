@@ -1,6 +1,7 @@
 package com.example.tourappapi.dao;
 
 import com.example.tourappapi.dao.interfaces.AgentRequestDao;
+import com.example.tourappapi.dto.AgentRequestDto;
 import com.example.tourappapi.enums.AgentRequestStatus;
 import com.example.tourappapi.models.AgentRequest;
 import com.example.tourappapi.repositories.AgentRequestRepository;
@@ -24,12 +25,18 @@ public class AgentRequestDaoImpl implements AgentRequestDao {
 
     @Override
     public void delete(String username, Integer id) {
-        AgentRequest agentRequest = getById(id);
-        if (agentRequest.getAgent().getUsername().equals(username)){
-            repository.deleteById(id);
-            return;
-        }
-        //TODO throw exception
+        AgentRequest agentRequest = getByIdAndUsername(id, username);
+         repository.deleteById(id);
+    }
+
+    @Override
+    public AgentRequest getByIdAndUsername(Integer id, String username) {
+        return repository.getById(id, username);
+    }
+
+    @Override
+    public List<AgentRequest> getArchivedRequests(String username) {
+        return repository.getArchivedRequests(username);
     }
 
     @Override
@@ -45,5 +52,15 @@ public class AgentRequestDaoImpl implements AgentRequestDao {
     @Override
     public List<AgentRequest> getAll(String username) {
         return repository.findAll(username);
+    }
+
+    @Override
+    public List<AgentRequest> getAllByRequestId(Integer id) {
+        return repository.getAllByRequest(id);
+    }
+
+    @Override
+    public void expireAgentRequests(Integer requestId) {
+        repository.expireAgentRequests(requestId);
     }
 }

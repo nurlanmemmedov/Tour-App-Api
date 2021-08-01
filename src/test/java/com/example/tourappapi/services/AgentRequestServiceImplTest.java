@@ -41,7 +41,7 @@ class AgentRequestServiceImplTest {
     @Order(1)
     @DisplayName("AgentRequestService -> get AgentRequests -> ACTIVE")
     void getActiveRequests() {
-        Assertions.assertEquals(agentRequestService.findByStatus("ACTIVE", "nurlanm").size(), 2);
+        Assertions.assertEquals(agentRequestService.findByStatus("NEWREQUEST", "nurlanm").size(), 2);
 
     }
 
@@ -49,15 +49,15 @@ class AgentRequestServiceImplTest {
     @Order(2)
     @DisplayName("AgentRequestService -> get AgentRequests -> OFFERED")
     void getOfferedRequests() {
-        Assertions.assertEquals(agentRequestService.findByStatus("OFFERED", "nurlanm").size(), 2);
+        Assertions.assertEquals(agentRequestService.findByStatus("OFFERMADE", "nurlanm").size(), 2);
 
     }
 
     @Test
     @Order(3)
-    @DisplayName("AgentRequestService -> get AgentRequests -> ARCHIVED")
+    @DisplayName("AgentRequestService -> get AgentRequests -> ACCEPTED")
     void getArchievedRequests() {
-        Assertions.assertEquals(agentRequestService.findByStatus("ARCHIVED", "username").size(), 2);
+        Assertions.assertEquals(agentRequestService.findByStatus("ACCEPTED", "username").size(), 2);
 
     }
 
@@ -79,15 +79,6 @@ class AgentRequestServiceImplTest {
     }
 
 
-    @Test
-    @Order(6)
-    @Transactional
-    @DisplayName("AgentRequestService -> Change Status")
-    void changeStatus() {
-        AgentRequest agentRequest = agentRequestRepository.findAll().stream().findFirst().orElse(null);
-        agentRequestService.changeStatus(agentRequest.getId(), AgentRequestStatus.ARCHIVED, "nurlanm");
-        Assertions.assertEquals(agentRequestRepository.getById(agentRequest.getId()).getStatus(), AgentRequestStatus.ARCHIVED);
-    }
 
     @Test
     @Order(7)
@@ -95,7 +86,7 @@ class AgentRequestServiceImplTest {
     @DisplayName("AgentRequestService -> Save")
     void save() {
         agentRequestService.save(AgentRequest.builder().request(requestRepository.getByUuid("1f6feuc2-aayc-45c4-kdeb-as91afd7c076"))
-                .agent(agentRepository.getById(1)).status(AgentRequestStatus.ACTIVE).build());
+                .agent(agentRepository.getById(1)).status(AgentRequestStatus.NEWREQUEST).build());
         Assertions.assertEquals(agentRequestRepository.findAll().size(), 13);
     }
 
@@ -125,18 +116,18 @@ class AgentRequestServiceImplTest {
         requestRepository.saveAllAndFlush(requests);
 
         List<AgentRequest> agentRequests = new ArrayList<>();
-        agentRequests.add(AgentRequest.builder().agent(agents.get(0)).request(requests.get(0)).status(AgentRequestStatus.ACTIVE).build());
-        agentRequests.add(AgentRequest.builder().agent(agents.get(1)).request(requests.get(0)).status(AgentRequestStatus.ARCHIVED).build());
-        agentRequests.add(AgentRequest.builder().agent(agents.get(2)).request(requests.get(0)).status(AgentRequestStatus.OFFERED).build());
-        agentRequests.add(AgentRequest.builder().agent(agents.get(0)).request(requests.get(1)).status(AgentRequestStatus.OFFERED).build());
-        agentRequests.add(AgentRequest.builder().agent(agents.get(1)).request(requests.get(1)).status(AgentRequestStatus.ACTIVE).build());
-        agentRequests.add(AgentRequest.builder().agent(agents.get(2)).request(requests.get(1)).status(AgentRequestStatus.ARCHIVED).build());
-        agentRequests.add(AgentRequest.builder().agent(agents.get(0)).request(requests.get(2)).status(AgentRequestStatus.OFFERED).build());
-        agentRequests.add(AgentRequest.builder().agent(agents.get(1)).request(requests.get(2)).status(AgentRequestStatus.ACTIVE).build());
-        agentRequests.add(AgentRequest.builder().agent(agents.get(2)).request(requests.get(2)).status(AgentRequestStatus.ARCHIVED).build());
-        agentRequests.add(AgentRequest.builder().agent(agents.get(0)).request(requests.get(3)).status(AgentRequestStatus.ACTIVE).build());
-        agentRequests.add(AgentRequest.builder().agent(agents.get(1)).request(requests.get(3)).status(AgentRequestStatus.ARCHIVED).build());
-        agentRequests.add(AgentRequest.builder().agent(agents.get(2)).request(requests.get(3)).status(AgentRequestStatus.OFFERED).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(0)).request(requests.get(0)).status(AgentRequestStatus.NEWREQUEST).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(1)).request(requests.get(0)).status(AgentRequestStatus.ACCEPTED).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(2)).request(requests.get(0)).status(AgentRequestStatus.OFFERMADE).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(0)).request(requests.get(1)).status(AgentRequestStatus.OFFERMADE).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(1)).request(requests.get(1)).status(AgentRequestStatus.NEWREQUEST).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(2)).request(requests.get(1)).status(AgentRequestStatus.ACCEPTED).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(0)).request(requests.get(2)).status(AgentRequestStatus.OFFERMADE).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(1)).request(requests.get(2)).status(AgentRequestStatus.NEWREQUEST).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(2)).request(requests.get(2)).status(AgentRequestStatus.ACCEPTED).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(0)).request(requests.get(3)).status(AgentRequestStatus.NEWREQUEST).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(1)).request(requests.get(3)).status(AgentRequestStatus.ACCEPTED).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(2)).request(requests.get(3)).status(AgentRequestStatus.OFFERMADE).build());
 
         agentRequestRepository.saveAllAndFlush(agentRequests);
     }
