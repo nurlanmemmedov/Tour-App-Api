@@ -66,7 +66,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public Offer save(String username, Integer id, OfferPostDto offer) throws JRException, IOException {
         AgentRequest agentRequest = agentRequestService.getByIdAndUsername(id, username);
-        if (!RequestUtil.validateWorkingHours(agentRequest.getRequest(), start, end)) throw new NotWorkTimeException();
+        if (!RequestUtil.validateWorkingHours(start, end)) throw new NotWorkTimeException();
         if (!agentRequest.getRequest().getIsActive() || agentRequest.getStatus() == AgentRequestStatus.EXPIRED) throw new RequestInactiveException();
         if(agentRequest.getIsArchived()) throw new RequestIsArchivedException();
         if(agentRequest.getOffer() != null) throw new AlreadyHaveOfferException();

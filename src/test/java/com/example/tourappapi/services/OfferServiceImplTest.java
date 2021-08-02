@@ -10,22 +10,23 @@ import com.example.tourappapi.repositories.RequestRepository;
 import com.example.tourappapi.services.interfaces.OfferService;
 import com.google.type.DateTime;
 import net.sf.jasperreports.engine.JRException;
+import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.*;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileNotFoundException;
-import java.time.Clock;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.io.IOException;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -52,24 +53,22 @@ public class OfferServiceImplTest {
     @MockBean
     private Clock clock;
 
-//    @Test
-//    @Order(1)
-//    @Transactional
-//    @DisplayName("OfferService -> Save")
-//    void save() throws JRException, FileNotFoundException {
-//        AgentRequest agentRequest = agentRequestRepository.findAll().stream().findFirst().orElse(null);
-//        service.save("nurlanm", agentRequest.getId(), OfferPostDto.builder().note("aa")
-//                .description("aaa").budget(100).build());
-//        Assertions.assertEquals(repository.findAll().size(), 1);
-//    }
+    @Test
+    @Order(1)
+    @Transactional
+    @DisplayName("OfferService -> Save")
+    void save() throws JRException, IOException {
+        System.out.println("LOCALDATETIME "+ LocalDateTime.now(clock));
+        AgentRequest agentRequest = agentRequestRepository.findAll().stream().findFirst().orElse(null);
+        service.save("nurlanm", agentRequest.getId(), OfferPostDto.builder().note("aa")
+                .description("aaa").budget(100).build());
+        Assertions.assertEquals(repository.findAll().size(), 1);
+    }
 
     @BeforeAll
     public void init() {
 
-        Instant instant = Instant.parse(LocalDateTime.now().withHour(12).toString());
-        ZoneId zoneId = ZoneId.systemDefault();
-        Clock fixedClock = Clock.fixed(instant, zoneId);
-
+        Clock fixedClock = Clock.fixed(Instant.parse("2021-08-02T10:00:00.00Z"), ZoneId.systemDefault());
         when(clock.instant()).thenReturn(fixedClock.instant());
         when(clock.getZone()).thenReturn(fixedClock.getZone());
 
@@ -84,9 +83,9 @@ public class OfferServiceImplTest {
         requestRepository.saveAllAndFlush(requests);
 
         List<AgentRequest> agentRequests = new ArrayList<>();
-        agentRequests.add(AgentRequest.builder().agent(agents.get(0)).request(requests.get(0)).status(AgentRequestStatus.NEWREQUEST).build());
-        agentRequests.add(AgentRequest.builder().agent(agents.get(1)).request(requests.get(0)).status(AgentRequestStatus.ACCEPTED).build());
-        agentRequests.add(AgentRequest.builder().agent(agents.get(2)).request(requests.get(0)).status(AgentRequestStatus.OFFERMADE).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(0)).request(requests.get(0)).isArchived(false).status(AgentRequestStatus.NEWREQUEST).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(1)).request(requests.get(0)).isArchived(false).status(AgentRequestStatus.ACCEPTED).build());
+        agentRequests.add(AgentRequest.builder().agent(agents.get(2)).request(requests.get(0)).isArchived(false).status(AgentRequestStatus.OFFERMADE).build());
 
         List<Offer> offers = new ArrayList<>();
         offers.add(Offer.builder().agentRequest(agentRequests.get(0)).isAccepted(false).build());
