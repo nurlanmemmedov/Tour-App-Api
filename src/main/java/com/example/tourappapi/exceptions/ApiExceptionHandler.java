@@ -81,6 +81,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 errorMessage, new HttpHeaders(), errorMessage.getStatus());
     }
 
+    @ExceptionHandler(value = {OldPassIsIncorrectException.class})
+    public ResponseEntity<Object> handleOldPassIsIncorrectException(OldPassIsIncorrectException ex, WebRequest request) {
+        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST,
+                ex.getLocalizedMessage(), "Old password is incorrect.");
+        return new ResponseEntity<>(
+                errorMessage, new HttpHeaders(), errorMessage.getStatus());
+    }
+
     @ExceptionHandler(value = {NoSuchEmailException.class})
     public ResponseEntity<Object> handleEmailNotFoundException(NoSuchEmailException ex, WebRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(HttpStatus.NOT_FOUND,

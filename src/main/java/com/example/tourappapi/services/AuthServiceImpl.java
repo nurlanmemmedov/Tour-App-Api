@@ -180,7 +180,12 @@ public class AuthServiceImpl implements AuthService {
         UserRepresentation userRepresentation = userRepresentations.stream()
                 .filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
         if (userRepresentation == null) throw new UserNotFoundException();
-
+        LoginPostDto login = LoginPostDto.builder().email(userRepresentation.getEmail()).password(dto.getOldPassword()).build();
+        try{
+            login(login);
+        }catch (Exception e){
+            throw new OldPassIsIncorrectException();
+        }
         UserResource userResource = usersResource.get(userRepresentation.getId());
         CredentialRepresentation passwordCred = new CredentialRepresentation();
         passwordCred.setTemporary(false);
