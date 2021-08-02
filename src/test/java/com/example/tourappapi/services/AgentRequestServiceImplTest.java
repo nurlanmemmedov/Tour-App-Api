@@ -98,6 +98,17 @@ class AgentRequestServiceImplTest {
     @Test
     @Order(8)
     @Transactional
+    @DisplayName("Toggle Archived -> True")
+    void toggleArchived() {
+        AgentRequest request = agentRequestRepository.findAll().stream().findFirst().orElse(null);
+        Assertions.assertTrue(agentRequestService.toggleArchived(request.getId(), "nurlanm"));
+    }
+
+
+
+    @Test
+    @Order(9)
+    @Transactional
     @DisplayName("AgentRequestService -> Create By Request")
     void createByRequest() {
         agentRequestService.createByRequest(requestRepository.getByUuid("236feuc2-aayc-45c4-kdeb-3491afd7c076"));

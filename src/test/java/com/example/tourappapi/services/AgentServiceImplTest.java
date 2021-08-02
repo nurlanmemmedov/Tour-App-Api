@@ -32,13 +32,14 @@ public class AgentServiceImplTest {
     private AgentRepository agentRepository;
 
 
-//    @Test
-//    @Order(1)
-//    @Transactional
-//    @DisplayName("AgentService -> get By Id")
-//    void getAgentById() {
-//        Assertions.assertEquals(agentService.getById(1), agentRepository.getById(1));
-//    }
+    @Test
+    @Order(1)
+    @Transactional
+    @DisplayName("AgentService -> get By Id")
+    void getAgentById() {
+        Agent agent = agentRepository.findAll().stream().findFirst().orElse(null);
+        Assertions.assertEquals(agentService.getById(agent.getId()), agent);
+    }
 
     @Test
     @Order(2)
@@ -82,14 +83,16 @@ public class AgentServiceImplTest {
         Assertions.assertEquals(agentRepository.findAll().size(), 4);
     }
 
-//    @Test
-//    @Order(7)
-//    @Transactional
-//    @DisplayName("AgentService -> Delete")
-//    void delete() {
-//        agentService.delete(3);
-//        Assertions.assertEquals(agentRepository.findAll().size(), 2);
-//    }
+
+    @Test
+    @Order(7)
+    @Transactional
+    @DisplayName("AgentService -> Delete")
+    void delete() {
+        Agent agent = agentRepository.findAll().stream().findFirst().orElse(null);
+        agentService.delete(agent.getId());
+        Assertions.assertEquals(agentRepository.findAll().size(), 2);
+    }
 
 
     @BeforeAll
