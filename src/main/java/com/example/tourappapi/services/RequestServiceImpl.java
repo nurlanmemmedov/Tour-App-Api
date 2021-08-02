@@ -18,16 +18,29 @@ public class RequestServiceImpl implements RequestService {
         this.agentRequestService = agentRequestService;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param request
+     * @return
+     */
     @Override
     public Request save(Request request){
         return dao.save(request);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param id
+     * @return
+     */
     @Override
     public Request getById(Integer id){
         return dao.getById(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateExpiredRequests() {
         List<Request> expiredRequests = getAllExpiredRequests();
@@ -35,11 +48,20 @@ public class RequestServiceImpl implements RequestService {
         dao.updateExpiredRequests();
     }
 
+    /**
+     * {@inheritDoc}
+     * @param uuid
+     * @return
+     */
     @Override
     public Request getByUuid(String uuid) {
         return dao.getByUuid(uuid);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return
+     */
     @Override
     public List<Request> getAllExpiredRequests() {
         return dao.getAllExpiredRequests();

@@ -54,13 +54,22 @@ public class OfferServiceImpl implements OfferService {
         this.requestService = requestService;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param username
+     * @param id
+     * @param offer
+     * @return
+     * @throws JRException
+     * @throws IOException
+     */
     @Override
     public Offer save(String username, Integer id, OfferPostDto offer) throws JRException, IOException {
         AgentRequest agentRequest = agentRequestService.getByIdAndUsername(id, username);
         if (!RequestUtil.validateWorkingHours(agentRequest.getRequest(), start, end)) throw new NotWorkTimeException();
         if (!agentRequest.getRequest().getIsActive() || agentRequest.getStatus() == AgentRequestStatus.EXPIRED) throw new RequestInactiveException();
         if(agentRequest.getIsArchived()) throw new RequestIsArchivedException();
-//        if(agentRequest.getOffer() != null) throw new AlreadyHaveOfferException();
+        if(agentRequest.getOffer() != null) throw new AlreadyHaveOfferException();
         Offer created = dao.save(Offer.builder().description(offer.getDescription()).places(offer.getPlaces())
                 .budget(offer.getBudget()).agentRequest(agentRequest).isAccepted(false)
                 .startDate(offer.getStartDate()).note(offer.getNote()).endDate(offer.getEndDate()).build());
@@ -71,16 +80,31 @@ public class OfferServiceImpl implements OfferService {
         return created;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param id
+     * @return
+     */
     @Override
     public Offer getById(Integer id) {
         return dao.getById(id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param username
+     * @return
+     */
     @Override
     public List<Offer> getAll(String username) {
         return dao.getAll(username);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param id
+     * @return
+     */
     @Override
     @Transactional
     public Boolean acceptOffer(Integer id) {

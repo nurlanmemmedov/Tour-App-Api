@@ -14,6 +14,14 @@ public class EmailServiceImpl implements EmailService {
     public EmailServiceImpl(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
+
+    /**
+     * {@inheritDoc}
+     * @param email
+     * @param subject
+     * @param text
+     * @throws MailException
+     */
     @Override
     public void sendMail(String email, String subject, String text) throws MailException {
         SimpleMailMessage mail = new SimpleMailMessage();
