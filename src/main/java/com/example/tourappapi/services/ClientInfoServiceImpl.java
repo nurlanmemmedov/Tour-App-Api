@@ -14,6 +14,11 @@ public class ClientInfoServiceImpl implements ClientInfoService {
         this.dao = dao;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param clientInfo
+     * @return
+     */
     @Override
     public ClientInfo save(ClientInfo clientInfo) {
         return dao.save(clientInfo);

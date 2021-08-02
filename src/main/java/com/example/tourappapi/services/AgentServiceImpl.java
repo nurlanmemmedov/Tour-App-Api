@@ -20,6 +20,11 @@ public class AgentServiceImpl implements AgentService {
         this.dao = dao;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param agent
+     * @return
+     */
     @Override
     public Agent save(Agent agent) {
         if (agent.getId() != null) return dao.create(agent);
@@ -27,6 +32,11 @@ public class AgentServiceImpl implements AgentService {
         return dao.create(agent);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param id
+     * @return
+     */
     @Override
     public Agent getById(Integer id) {
         Agent agent = dao.getById(id);
@@ -34,6 +44,11 @@ public class AgentServiceImpl implements AgentService {
         return agent;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param username
+     * @return
+     */
     @Override
     public Agent getByUsername(String username) {
         Agent agent = dao.getByUsername(username);
@@ -41,6 +56,11 @@ public class AgentServiceImpl implements AgentService {
         return agent;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param email
+     * @return
+     */
     @Override
     public Agent getByEmail(String email) {
         Agent agent = dao.getByEmail(email);
@@ -48,16 +68,29 @@ public class AgentServiceImpl implements AgentService {
         return agent;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param id
+     */
     @Override
     public void delete(Integer id) {
         dao.delete(id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return
+     */
     @Override
     public List<Agent> getAll() {
         return dao.getAll();
     }
 
+    /**
+     * {@inheritDoc}
+     * @param agent
+     * @return
+     */
     @Override
     public Boolean checkIfExists(Agent agent) {
         if (dao.getByUsername(agent.getUsername())!=null){

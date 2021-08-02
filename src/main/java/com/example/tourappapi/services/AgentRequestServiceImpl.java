@@ -32,11 +32,20 @@ public class AgentRequestServiceImpl implements AgentRequestService {
         this.mapper = mapper;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param agentRequest
+     * @return
+     */
     @Override
     public AgentRequest save(AgentRequest agentRequest) {
         return dao.save(agentRequest);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param request
+     */
     @Override
     public void createByRequest(Request request) {
         List<Agent> agents = agentService.getAll();
@@ -46,6 +55,12 @@ public class AgentRequestServiceImpl implements AgentRequestService {
                 .status(AgentRequestStatus.NEWREQUEST).build()));
     }
 
+    /**
+     * {@inheritDoc}
+     * @param id
+     * @param username
+     * @return
+     */
     @Override
     public boolean toggleArchived(Integer id, String username) {
         AgentRequest agentRequest = getByIdAndUsername(id, username);
@@ -59,12 +74,22 @@ public class AgentRequestServiceImpl implements AgentRequestService {
         return agentRequest.getIsArchived();
     }
 
-
+    /**
+     * {@inheritDoc}
+     * @param id
+     * @return
+     */
     @Override
     public AgentRequest getById(Integer id) {
         return dao.getById(id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param id
+     * @param username
+     * @return
+     */
     @Override
     public AgentRequest getByIdAndUsername(Integer id, String username){
         AgentRequest agentRequest = dao.getByIdAndUsername(id, username);
@@ -72,6 +97,14 @@ public class AgentRequestServiceImpl implements AgentRequestService {
         return agentRequest;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param status
+     * @param username
+     * @param index
+     * @param size
+     * @return
+     */
     @Override
     public Paging<AgentRequestDto> findByStatus(String status, String username, Integer index, Integer size) {
         Page<AgentRequest> agentRequests = dao.getAllByStatus(AgentRequestStatus.valueOf(status), username, index, size);
@@ -84,6 +117,13 @@ public class AgentRequestServiceImpl implements AgentRequestService {
                 .build();
     }
 
+    /**
+     * {@inheritDoc}
+     * @param username
+     * @param index
+     * @param size
+     * @return
+     */
     @Override
     public Paging<AgentRequestDto> getArchivedRequests(String username, Integer index, Integer size) {
         Page<AgentRequest> agentRequests = dao.getArchivedRequests(username, index, size);
@@ -96,6 +136,13 @@ public class AgentRequestServiceImpl implements AgentRequestService {
                 .build();
     }
 
+    /**
+     * {@inheritDoc}
+     * @param username
+     * @param index
+     * @param size
+     * @return
+     */
     @Override
     public Paging<AgentRequestDto> getAll(String username, Integer index, Integer size) {
         Page<AgentRequest> agentRequests = dao.getAll(username, index, size);
@@ -108,11 +155,20 @@ public class AgentRequestServiceImpl implements AgentRequestService {
                 .build();
     }
 
+    /**
+     * {@inheritDoc}
+     * @param id
+     * @return
+     */
     @Override
     public List<AgentRequest> getAllByRequestId(Integer id) {
         return dao.getAllByRequestId(id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param requestId
+     */
     @Override
     public void expireAgentRequests(Integer requestId) {
         dao.expireAgentRequests(requestId);

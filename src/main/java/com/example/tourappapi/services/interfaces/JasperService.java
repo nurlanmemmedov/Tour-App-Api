@@ -7,6 +7,9 @@ import net.sf.jasperreports.engine.JRException;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+/**
+ * represents the JasperReport service throughout the application
+ */
 public interface JasperService {
 
     /**
