@@ -1,5 +1,7 @@
 package com.example.tourappapi.services.interfaces;
 
+import javax.mail.MessagingException;
+
 /**
  * represents the EmailService throughout the application
  */

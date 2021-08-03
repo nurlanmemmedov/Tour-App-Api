@@ -138,7 +138,7 @@ public class AuthServiceImpl implements AuthService {
         if (agent == null) throw new NoSuchEmailException();
         ConfirmationToken token = new ConfirmationToken(agent);
         confirmationTokenRepository.save(token);
-        emailService.sendMail(agent.getEmail(), "Tour", "Reset your password" + forgotPasswordUrl + token.getConfirmationToken());
+        emailService.sendMail(agent.getEmail(), "Tour", "Reset your password " + forgotPasswordUrl + token.getConfirmationToken());
     }
 
     /**
