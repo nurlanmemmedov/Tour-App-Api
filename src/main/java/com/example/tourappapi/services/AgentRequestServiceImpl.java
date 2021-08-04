@@ -14,6 +14,8 @@ import com.example.tourappapi.utils.pagination.Paging;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -107,7 +109,12 @@ public class AgentRequestServiceImpl implements AgentRequestService {
      */
     @Override
     public Paging<AgentRequestDto> findByStatus(String status, String username, Integer index, Integer size) {
-        Page<AgentRequest> agentRequests = dao.getAllByStatus(AgentRequestStatus.valueOf(status), username, index, size);
+        AgentRequestStatus enumStatus = null;
+        try {
+            enumStatus = AgentRequestStatus.valueOf(status);
+        }catch (Exception e){
+        }
+        Page<AgentRequest> agentRequests = dao.getAllByStatus(enumStatus, username, index, size);
         return new Paging<AgentRequestDto>().toBuilder()
                 .pageCount((long) agentRequests.getTotalPages())
                 .total(agentRequests.getTotalElements())

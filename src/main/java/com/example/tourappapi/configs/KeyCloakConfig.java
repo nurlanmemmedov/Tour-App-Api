@@ -21,8 +21,11 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class KeyCloakConfig extends KeycloakWebSecurityConfigurerAdapter {
 
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+//        super.configure(http);
         http.csrf().disable().authorizeRequests().anyRequest().permitAll();
     }
 

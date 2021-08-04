@@ -89,6 +89,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 errorMessage, new HttpHeaders(), errorMessage.getStatus());
     }
 
+    @ExceptionHandler(value = {PasswordsAreTheSameException.class})
+    public ResponseEntity<Object> handlePasswordsAreTheSameException(PasswordsAreTheSameException ex, WebRequest request) {
+        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST,
+                ex.getLocalizedMessage(), "your new password cannot be the same as your old password.");
+        return new ResponseEntity<>(
+                errorMessage, new HttpHeaders(), errorMessage.getStatus());
+    }
+
     @ExceptionHandler(value = {NoSuchEmailException.class})
     public ResponseEntity<Object> handleEmailNotFoundException(NoSuchEmailException ex, WebRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(HttpStatus.NOT_FOUND,
@@ -184,6 +192,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                                                                      WebRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(HttpStatus.CONFLICT,
                 ex.getLocalizedMessage(), "You already have an offer for this request.");
+        return new ResponseEntity<>(
+                errorMessage, new HttpHeaders(), errorMessage.getStatus());
+    }
+
+    @ExceptionHandler(value = {NoSuchStatusException.class})
+    public ResponseEntity<Object> handleNoSuchStatusException(NoSuchStatusException ex,
+                                                                  WebRequest request) {
+        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST,
+                ex.getLocalizedMessage(), "Can't find such status.");
         return new ResponseEntity<>(
                 errorMessage, new HttpHeaders(), errorMessage.getStatus());
     }

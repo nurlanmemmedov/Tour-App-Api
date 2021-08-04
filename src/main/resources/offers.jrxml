@@ -114,7 +114,20 @@ There are two flowers, the first one is printed only starting from the second pa
         <band height="400" splitType="Stretch">
 
             <frame>
-                <reportElement uuid="314bfd5b-7b0a-42f4-aca3-e61f0283f126" positionType="Float" x="213" y="41" width="550" height="40"/>
+                <reportElement uuid="8311a483-955e-4280-a9ac-513d7d34495b" positionType="Float" x="213" y="41" width="550" height="40"/>
+                <staticText>
+                    <reportElement uuid="da404b4e-7908-40ae-8e1b-38e19d9ddc7f" positionType="Float" x="0" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
+                    <textElement/>
+                    <text><![CDATA[Description]]></text>
+                </staticText>
+                <textField isStretchWithOverflow="true">
+                    <reportElement uuid="e0e312e8-cd2f-48af-8ae8-df95c6195488" positionType="Float" x="121" y="0" width="400" height="20" isPrintWhenDetailOverflows="true"/>
+                    <textElement/>
+                    <textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+                </textField>
+            </frame>
+            <frame>
+                <reportElement uuid="314bfd5b-7b0a-42f4-aca3-e61f0283f126" positionType="Float" x="213" y="81" width="550" height="40"/>
                 <staticText>
                     <reportElement uuid="e07201bb-a677-4dc9-a332-f94e6eca2722" positionType="Float" x="0" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
                     <textElement />
@@ -127,7 +140,7 @@ There are two flowers, the first one is printed only starting from the second pa
                 </textField>
             </frame>
             <frame>
-                <reportElement uuid="314bfd5b-7b0a-42f4-aca3-e61f0283f126" positionType="Float" x="213" y="81" width="550" height="40"/>
+                <reportElement uuid="314bfd5b-7b0a-42f4-aca3-e61f0283f126" positionType="Float" x="213" y="121" width="550" height="40"/>
                 <staticText>
                     <reportElement uuid="e07201bb-a677-4dc9-a332-f94e6eca2722" positionType="Float" x="0" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
                     <textElement/>
@@ -140,7 +153,7 @@ There are two flowers, the first one is printed only starting from the second pa
                 </textField>
             </frame>
             <frame>
-                <reportElement uuid="314bfd5b-7b0a-42f4-aca3-e61f0283f126" positionType="Float" x="213" y="121" width="550" height="40"/>
+                <reportElement uuid="314bfd5b-7b0a-42f4-aca3-e61f0283f126" positionType="Float" x="213" y="161" width="550" height="40"/>
                 <staticText>
                     <reportElement uuid="e07201bb-a677-4dc9-a332-f94e6eca2722" positionType="Float" x="0" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
                     <textElement/>
@@ -152,19 +165,7 @@ There are two flowers, the first one is printed only starting from the second pa
                     <textFieldExpression><![CDATA[$F{note}]]></textFieldExpression>
                 </textField>
             </frame>
-            <frame>
-                <reportElement uuid="8311a483-955e-4280-a9ac-513d7d34495b" positionType="Float" x="213" y="161" width="550" height="40"/>
-                <staticText>
-                    <reportElement uuid="da404b4e-7908-40ae-8e1b-38e19d9ddc7f" positionType="Float" x="0" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
-                    <textElement/>
-                    <text><![CDATA[Description]]></text>
-                </staticText>
-                <textField isStretchWithOverflow="true">
-                    <reportElement uuid="e0e312e8-cd2f-48af-8ae8-df95c6195488" positionType="Float" x="121" y="0" width="400" height="20" isPrintWhenDetailOverflows="true"/>
-                    <textElement/>
-                    <textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
-                </textField>
-            </frame>
+
             <frame>
                 <reportElement uuid="8ff2baf9-b0ec-4c8a-b54a-9edd08b200cc" positionType="Float" x="213" y="201" width="550" height="40"/>
                 <staticText>

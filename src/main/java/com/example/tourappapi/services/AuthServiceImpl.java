@@ -88,18 +88,14 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void confirmAccount(String confirmationToken) {
         ConfirmationToken token = confirmationTokenRepository.getByConfirmationToken(confirmationToken);
-        if(token != null)
-        {
-            Agent agent = service.getByEmail(token.getAgent().getEmail());
-            agent.setIsActive(true);
-            service.save(agent);
-            emailService.sendMail(agent.getEmail(), "Congratilations",
-                    "You are registered successfully!");
-        }
-        else
-        {
-            //TODO
-        }
+        if (token == null || token.getAgent() == null) throw new InvalidTokenException();
+        if (LocalDateTime.now().isAfter(token.getCreatedDate().plusDays(3))) throw new TokenExpiredException();
+        Agent agent = service.getByEmail(token.getAgent().getEmail());
+        if (agent == null) throw new InvalidTokenException();
+        agent.setIsActive(true);
+        service.save(agent);
+        emailService.sendMail(agent.getEmail(), "Congratilations",
+                "You are registered successfully!");
     }
 
     /**
@@ -170,6 +166,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void changePassword(String username, ChangePasswordDto dto) {
+        if (dto.getOldPassword().equals(dto.getNewPassword())) throw new PasswordsAreTheSameException();
         Keycloak keycloak = KeycloakBuilder.builder().serverUrl(authServerUrl)
                 .grantType(OAuth2Constants.PASSWORD).realm("master").clientId("admin-cli")
                 .username("nurlan").password("rafet123")
