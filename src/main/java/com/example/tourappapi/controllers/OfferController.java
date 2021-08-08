@@ -27,5 +27,5 @@ public class OfferController {
     public ResponseEntity<Offer> getById(@RequestAttribute("user") UserDto userDto, @PathVariable Integer id){
         return new ResponseEntity<Offer>(service.get(userDto.getUsername(), id), HttpStatus.OK);
     }
-
+    
 }
