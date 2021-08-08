@@ -12,7 +12,7 @@ public interface AuthService {
      * @param user
      * @return
      */
-    String register(RegisterPostDto user);
+    String register(RegisterPostDto user) throws Exception;
 
     /**
      * confirms account

@@ -67,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
      * @return
      */
     @Override
-    public String register(RegisterPostDto userDTO) {
+    public String register(RegisterPostDto userDTO) throws Exception {
         Agent user = new Agent();
         user.setEmail(userDTO.getEmail());
         user.setUsername(userDTO.getUsername());
@@ -83,7 +83,7 @@ public class AuthServiceImpl implements AuthService {
             emailService.sendMail(user.getEmail(), "Tour", "Verify account http://localhost:8000/api/v1/users/confirm-account?token=" + confirmationToken.getConfirmationToken());
             return "Please check your email";
         }
-        return null;
+        throw new Exception();
     }
 
     /**
