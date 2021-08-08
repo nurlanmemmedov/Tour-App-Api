@@ -1,13 +1,11 @@
 package com.example.tourappapi.services;
 
+import com.example.tourappapi.dao.interfaces.AgentRequestDao;
 import com.example.tourappapi.dao.interfaces.OfferDao;
 import com.example.tourappapi.dto.OfferDto;
 import com.example.tourappapi.dto.OfferPostDto;
 import com.example.tourappapi.enums.AgentRequestStatus;
-import com.example.tourappapi.exceptions.AlreadyHaveOfferException;
-import com.example.tourappapi.exceptions.NotWorkTimeException;
-import com.example.tourappapi.exceptions.RequestInactiveException;
-import com.example.tourappapi.exceptions.RequestIsArchivedException;
+import com.example.tourappapi.exceptions.*;
 import com.example.tourappapi.models.Agent;
 import com.example.tourappapi.models.AgentRequest;
 import com.example.tourappapi.models.Offer;
@@ -31,7 +29,7 @@ public class OfferServiceImpl implements OfferService {
     private OfferDao dao;
     private JasperService jasperService;
     private AgentService agentService;
-    private AgentRequestService agentRequestService;
+    private AgentRequestDao agentRequestDao;
     private RabbitmqService rabbitmqService;
     private RequestService requestService;
 
@@ -43,13 +41,13 @@ public class OfferServiceImpl implements OfferService {
     public OfferServiceImpl(OfferDao dao,
                             JasperService jasperService,
                             AgentService agentService,
-                            AgentRequestService agentRequestService,
+                            AgentRequestDao agentRequestDao,
                             RabbitmqService rabbitmqService,
                             RequestService requestService){
         this.dao = dao;
         this.jasperService = jasperService;
         this.agentService = agentService;
-        this.agentRequestService = agentRequestService;
+        this.agentRequestDao = agentRequestDao;
         this.rabbitmqService = rabbitmqService;
         this.requestService = requestService;
     }
@@ -65,7 +63,7 @@ public class OfferServiceImpl implements OfferService {
      */
     @Override
     public Offer save(String username, Integer id, OfferPostDto offer) throws JRException, IOException {
-        AgentRequest agentRequest = agentRequestService.getByIdAndUsername(id, username);
+        AgentRequest agentRequest = agentRequestDao.getByIdAndUsername(id, username);
         if (!RequestUtil.validateWorkingHours(start, end)) throw new NotWorkTimeException();
         if (!agentRequest.getRequest().getIsActive() || agentRequest.getStatus() == AgentRequestStatus.EXPIRED) throw new RequestInactiveException();
         if(agentRequest.getIsArchived()) throw new RequestIsArchivedException();
@@ -75,7 +73,7 @@ public class OfferServiceImpl implements OfferService {
                 .startDate(offer.getStartDate()).note(offer.getNote()).endDate(offer.getEndDate()).build());
         agentRequest.setStatus(AgentRequestStatus.OFFERMADE);
         agentRequest.setOffer(created);
-        agentRequestService.save(agentRequest);
+        agentRequestDao.save(agentRequest);
         handleFile(created);
         return created;
     }
@@ -88,6 +86,13 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public Offer getById(Integer id) {
         return dao.getById(id);
+    }
+
+    @Override
+    public Offer get(String username, Integer id) {
+        Offer offer = dao.getByIdAndUsername(username, id);
+        if (offer == null) throw new OfferNotFoundException();
+        return offer;
     }
 
     /**
@@ -114,11 +119,8 @@ public class OfferServiceImpl implements OfferService {
 
         AgentRequest agentRequest = offer.getAgentRequest();
         agentRequest.setStatus(AgentRequestStatus.ACCEPTED);
-        agentRequestService.save(agentRequest);
+        agentRequestDao.save(agentRequest);
 
-        Request request = requestService.getById(offer.getAgentRequest().getRequest().getId());
-        request.setIsActive(false);
-        requestService.save(request);
         return true;
     }
 

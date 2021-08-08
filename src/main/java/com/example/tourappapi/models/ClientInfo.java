@@ -28,4 +28,8 @@ public class ClientInfo {
 
     @Column(name = "contact_information")
     private String contactInformation;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "request_id", referencedColumnName = "id")
+    private Request request;
 }

@@ -23,4 +23,14 @@ public class ClientInfoServiceImpl implements ClientInfoService {
     public ClientInfo save(ClientInfo clientInfo) {
         return dao.save(clientInfo);
     }
+
+    /**
+     * {@inheritDoc}
+     * @param requestId
+     * @return
+     */
+    @Override
+    public ClientInfo getByRequestId(Integer requestId) {
+        return dao.getByRequestId(requestId);
+    }
 }

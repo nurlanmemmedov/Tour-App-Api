@@ -1,7 +1,6 @@
 package com.example.tourappapi.dao;
 
 import com.example.tourappapi.dao.interfaces.AgentRequestDao;
-import com.example.tourappapi.dto.AgentRequestDto;
 import com.example.tourappapi.enums.AgentRequestStatus;
 import com.example.tourappapi.models.AgentRequest;
 import com.example.tourappapi.repositories.AgentRequestRepository;
