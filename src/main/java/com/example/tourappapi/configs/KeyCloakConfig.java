@@ -16,16 +16,15 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
+import javax.annotation.security.RolesAllowed;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class KeyCloakConfig extends KeycloakWebSecurityConfigurerAdapter {
 
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        super.configure(http);
         http.csrf().disable().authorizeRequests().anyRequest().permitAll();
     }
 

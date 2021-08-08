@@ -105,6 +105,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 errorMessage, new HttpHeaders(), errorMessage.getStatus());
     }
 
+    @ExceptionHandler(value = {OfferNotFoundException.class})
+    public ResponseEntity<Object> handleOfferNotFoundException(OfferNotFoundException ex, WebRequest request) {
+        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.NOT_FOUND,
+                ex.getLocalizedMessage(), "No offer found with this id");
+        return new ResponseEntity<>(
+                errorMessage, new HttpHeaders(), errorMessage.getStatus());
+    }
+
     @ExceptionHandler(value = {InvalidTokenException.class})
     public ResponseEntity<Object> handleTokenInvalidException(InvalidTokenException ex, WebRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST,

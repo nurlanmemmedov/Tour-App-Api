@@ -43,6 +43,11 @@ public class AuthServiceImpl implements AuthService {
     private String clientSecret;
     @Value("${forgotpassword.url}")
     private String forgotPasswordUrl;
+    @Value("${keycloakcli.username}")
+    private String keycloakUsername;
+    @Value("${keycloakcli.password}")
+    private String keycloakPassword;
+
 
     AgentService service;
     EmailService emailService;
@@ -146,12 +151,7 @@ public class AuthServiceImpl implements AuthService {
         ConfirmationToken token = confirmationTokenRepository.getByConfirmationToken(dto.getToken());
         if (token == null) throw new InvalidTokenException();
         if (LocalDateTime.now().isAfter(token.getCreatedDate().plusDays(3))) throw new TokenExpiredException();
-        Keycloak keycloak = KeycloakBuilder.builder().serverUrl(authServerUrl)
-                .grantType(OAuth2Constants.PASSWORD).realm("master").clientId("admin-cli")
-                .username("nurlan").password("rafet123")
-                .resteasyClient(new ResteasyClientBuilder().connectionPoolSize(10).build()).build();
-        RealmResource realmResource = keycloak.realm(realm);
-        UsersResource usersResource = realmResource.users();
+        UsersResource usersResource = getUsersResource();
         List<UserRepresentation> userRepresentations = usersResource.search(token.getAgent().getUsername());
         UserRepresentation userRepresentation = userRepresentations.stream()
                 .filter(u -> u.getUsername().equals(token.getAgent().getUsername())).findFirst().orElse(null);
@@ -167,12 +167,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void changePassword(String username, ChangePasswordDto dto) {
         if (dto.getOldPassword().equals(dto.getNewPassword())) throw new PasswordsAreTheSameException();
-        Keycloak keycloak = KeycloakBuilder.builder().serverUrl(authServerUrl)
-                .grantType(OAuth2Constants.PASSWORD).realm("master").clientId("admin-cli")
-                .username("nurlan").password("rafet123")
-                .resteasyClient(new ResteasyClientBuilder().connectionPoolSize(10).build()).build();
-        RealmResource realmResource = keycloak.realm(realm);
-        UsersResource usersResource = realmResource.users();
+        UsersResource usersResource = getUsersResource();
         List<UserRepresentation> userRepresentations = usersResource.search(username);
         UserRepresentation userRepresentation = userRepresentations.stream()
                 .filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
@@ -194,14 +189,13 @@ public class AuthServiceImpl implements AuthService {
     public boolean registerToKeyclaok(RegisterPostDto userDTO){
         Keycloak keycloak = KeycloakBuilder.builder().serverUrl(authServerUrl)
                 .grantType(OAuth2Constants.PASSWORD).realm("master").clientId("admin-cli")
-                .username("nurlan").password("rafet123")
+                .username(keycloakUsername).password(keycloakPassword)
                 .resteasyClient(new ResteasyClientBuilder().connectionPoolSize(10).build()).build();
         UserRepresentation user = new UserRepresentation();
         user.setEnabled(true);
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
-        RealmResource realmResource = keycloak.realm(realm);
-        UsersResource usersResource = realmResource.users();
+        UsersResource usersResource = getUsersResource();
         Response response = usersResource.create(user);
         keycloak.tokenManager().getAccessToken();
         if (response.getStatus() == 201) {
@@ -214,5 +208,14 @@ public class AuthServiceImpl implements AuthService {
             userResource.resetPassword(passwordCred);
         }
         return response.getStatus() == 201;
+    }
+
+    private UsersResource getUsersResource(){
+        Keycloak keycloak = KeycloakBuilder.builder().serverUrl(authServerUrl)
+                .grantType(OAuth2Constants.PASSWORD).realm("master").clientId("admin-cli")
+                .username(keycloakUsername).password(keycloakPassword)
+                .resteasyClient(new ResteasyClientBuilder().connectionPoolSize(10).build()).build();
+        RealmResource realmResource = keycloak.realm(realm);
+        return realmResource.users();
     }
 }

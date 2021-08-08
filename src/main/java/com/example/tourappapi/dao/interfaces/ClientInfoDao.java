@@ -4,4 +4,5 @@ import com.example.tourappapi.models.ClientInfo;
 
 public interface ClientInfoDao {
     ClientInfo save(ClientInfo clientInfo);
+    ClientInfo getByRequestId(Integer requestId);
 }

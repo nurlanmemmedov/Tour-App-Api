@@ -12,4 +12,12 @@ public interface ClientInfoService {
      * @return
      */
     ClientInfo save(ClientInfo clientInfo);
+
+
+    /**
+     * gets clientInfo by request id
+     * @param requestId
+     * @return
+     */
+    ClientInfo getByRequestId(Integer requestId);
 }

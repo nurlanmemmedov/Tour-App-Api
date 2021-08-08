@@ -33,6 +33,14 @@ public interface OfferService {
     Offer getById(Integer id);
 
     /**
+     * gets offer by id and username
+     * @param id
+     * @param username
+     * @return
+     */
+    Offer get(String username, Integer id);
+
+    /**
      * gets all offers
      * @param username
      * @return

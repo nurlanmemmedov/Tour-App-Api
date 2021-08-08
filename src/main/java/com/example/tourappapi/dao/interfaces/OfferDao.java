@@ -15,5 +15,7 @@ public interface OfferDao {
 
     Offer getById(Integer id);
 
+    Offer getByIdAndUsername(String username, Integer id);
+
     List<Offer> getAll(String username);
 }

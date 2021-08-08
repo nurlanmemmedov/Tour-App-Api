@@ -1,9 +1,7 @@
 package com.example.tourappapi.services.interfaces;
 
-import com.example.tourappapi.dao.interfaces.AgentRequestDao;
 import com.example.tourappapi.dto.AgentRequestDto;
-import com.example.tourappapi.enums.AgentRequestStatus;
-import com.example.tourappapi.models.Agent;
+import com.example.tourappapi.dto.AgentRequestListDto;
 import com.example.tourappapi.models.AgentRequest;
 import com.example.tourappapi.models.Request;
 import com.example.tourappapi.utils.pagination.Paging;
@@ -50,7 +48,7 @@ public interface AgentRequestService {
      * @param username
      * @return
      */
-    AgentRequest getByIdAndUsername(Integer id, String username);
+    AgentRequestDto getByIdAndUsername(Integer id, String username);
 
     /**
      * finds agent requests by status paginated
@@ -60,7 +58,7 @@ public interface AgentRequestService {
      * @param size
      * @return
      */
-    Paging<AgentRequestDto> findByStatus(String status, String username, Integer index, Integer size);
+    Paging<AgentRequestListDto> findByStatus(String status, String username, Integer index, Integer size);
 
     /**
      * gets archived requests of agent paginated
@@ -69,7 +67,7 @@ public interface AgentRequestService {
      * @param size
      * @return
      */
-    Paging<AgentRequestDto> getArchivedRequests(String username, Integer index, Integer size);
+    Paging<AgentRequestListDto> getArchivedRequests(String username, Integer index, Integer size);
 
     /**
      * gets all requests of agent paginated
@@ -78,7 +76,7 @@ public interface AgentRequestService {
      * @param size
      * @return
      */
-    Paging<AgentRequestDto> getAll(String username, Integer index, Integer size);
+    Paging<AgentRequestListDto> getAll(String username, Integer index, Integer size);
 
     /**
      * gets list of agent requests by request id
@@ -86,10 +84,4 @@ public interface AgentRequestService {
      * @return
      */
     List<AgentRequest> getAllByRequestId(Integer id);
-
-    /**
-     * expires requests of agent by request id
-     * @param requestId
-     */
-    void expireAgentRequests(Integer requestId);
 }

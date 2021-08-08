@@ -18,4 +18,9 @@ public class ClientInfoDaoImpl implements ClientInfoDao {
     public ClientInfo save(ClientInfo clientInfo) {
         return repository.save(clientInfo);
     }
+
+    @Override
+    public ClientInfo getByRequestId(Integer requestId) {
+        return repository.getByRequestId(requestId);
+    }
 }

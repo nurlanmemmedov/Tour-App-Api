@@ -2,6 +2,7 @@ package com.example.tourappapi.services;
 
 import com.example.tourappapi.dao.interfaces.AgentRequestDao;
 import com.example.tourappapi.dto.AgentRequestDto;
+import com.example.tourappapi.dto.AgentRequestListDto;
 import com.example.tourappapi.enums.AgentRequestStatus;
 import com.example.tourappapi.exceptions.UserRequestNotFoundException;
 import com.example.tourappapi.models.Agent;
@@ -14,8 +15,6 @@ import com.example.tourappapi.utils.pagination.Paging;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,7 +64,7 @@ public class AgentRequestServiceImpl implements AgentRequestService {
      */
     @Override
     public boolean toggleArchived(Integer id, String username) {
-        AgentRequest agentRequest = getByIdAndUsername(id, username);
+        AgentRequest agentRequest = dao.getByIdAndUsername(id, username);
         if (agentRequest.getIsArchived() == null){
             agentRequest.setIsArchived(true);
             dao.save(agentRequest);
@@ -93,10 +92,10 @@ public class AgentRequestServiceImpl implements AgentRequestService {
      * @return
      */
     @Override
-    public AgentRequest getByIdAndUsername(Integer id, String username){
+    public AgentRequestDto getByIdAndUsername(Integer id, String username){
         AgentRequest agentRequest = dao.getByIdAndUsername(id, username);
         if (agentRequest == null) throw new UserRequestNotFoundException();
-        return agentRequest;
+        return mapper.convertOneDim(agentRequest, AgentRequestDto.class);
     }
 
     /**
@@ -108,18 +107,18 @@ public class AgentRequestServiceImpl implements AgentRequestService {
      * @return
      */
     @Override
-    public Paging<AgentRequestDto> findByStatus(String status, String username, Integer index, Integer size) {
+    public Paging<AgentRequestListDto> findByStatus(String status, String username, Integer index, Integer size) {
         AgentRequestStatus enumStatus = null;
         try {
             enumStatus = AgentRequestStatus.valueOf(status);
         }catch (Exception e){
         }
         Page<AgentRequest> agentRequests = dao.getAllByStatus(enumStatus, username, index, size);
-        return new Paging<AgentRequestDto>().toBuilder()
+        return new Paging<AgentRequestListDto>().toBuilder()
                 .pageCount((long) agentRequests.getTotalPages())
                 .total(agentRequests.getTotalElements())
                 .items(getResult(agentRequests).stream()
-                        .map(a -> mapper.convertOneDim(a, AgentRequestDto.class))
+                        .map(a -> mapper.convertOneDim(a, AgentRequestListDto.class))
                         .collect(Collectors.toList()))
                 .build();
     }
@@ -132,13 +131,13 @@ public class AgentRequestServiceImpl implements AgentRequestService {
      * @return
      */
     @Override
-    public Paging<AgentRequestDto> getArchivedRequests(String username, Integer index, Integer size) {
+    public Paging<AgentRequestListDto> getArchivedRequests(String username, Integer index, Integer size) {
         Page<AgentRequest> agentRequests = dao.getArchivedRequests(username, index, size);
-        return new Paging<AgentRequestDto>().toBuilder()
+        return new Paging<AgentRequestListDto>().toBuilder()
                 .pageCount((long) agentRequests.getTotalPages())
                 .total(agentRequests.getTotalElements())
                 .items(getResult(agentRequests).stream()
-                        .map(a -> mapper.convertOneDim(a, AgentRequestDto.class))
+                        .map(a -> mapper.convertOneDim(a, AgentRequestListDto.class))
                         .collect(Collectors.toList()))
                 .build();
     }
@@ -151,13 +150,13 @@ public class AgentRequestServiceImpl implements AgentRequestService {
      * @return
      */
     @Override
-    public Paging<AgentRequestDto> getAll(String username, Integer index, Integer size) {
+    public Paging<AgentRequestListDto> getAll(String username, Integer index, Integer size) {
         Page<AgentRequest> agentRequests = dao.getAll(username, index, size);
-        return new Paging<AgentRequestDto>().toBuilder()
+        return new Paging<AgentRequestListDto>().toBuilder()
                 .pageCount((long) agentRequests.getTotalPages())
                 .total(agentRequests.getTotalElements())
                 .items(getResult(agentRequests).stream()
-                        .map(a -> mapper.convertOneDim(a, AgentRequestDto.class))
+                        .map(a -> mapper.convertOneDim(a, AgentRequestListDto.class))
                         .collect(Collectors.toList()))
                 .build();
     }
@@ -170,14 +169,5 @@ public class AgentRequestServiceImpl implements AgentRequestService {
     @Override
     public List<AgentRequest> getAllByRequestId(Integer id) {
         return dao.getAllByRequestId(id);
-    }
-
-    /**
-     * {@inheritDoc}
-     * @param requestId
-     */
-    @Override
-    public void expireAgentRequests(Integer requestId) {
-        dao.expireAgentRequests(requestId);
     }
 }

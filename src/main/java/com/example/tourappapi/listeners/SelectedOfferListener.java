@@ -35,14 +35,15 @@ public class SelectedOfferListener {
 
     @RabbitListener(queues = RabbitmqConfig.SELECTION)
     @Transactional
-    public void consumeMessageFromQueue(SelectedOfferDto selection) throws JsonProcessingException {
-        ClientInfo clientInfo = service.save(ClientInfo.builder()
-                .firstName(selection.getName())
-                .lastName(selection.getSurname())
-                .username(selection.getUsername())
-                .contactInformation(selection.getContactInfo()).build());
+    public void consumeMessageFromQueue(SelectedOfferDto selection){
         Offer offer = offerService.getById(selection.getOfferId());
+        if (offer.getIsAccepted()) return;
         offerService.acceptOffer(offer.getId());
+        ClientInfo clientInfo = service.getByRequestId(offer.getAgentRequest().getRequest().getId());
+        if (clientInfo == null){
+            clientInfo = service.save(ClientInfo.builder().firstName(selection.getName()).lastName(selection.getSurname())
+                    .username(selection.getUsername()).contactInformation(selection.getContactInfo()).build());
+        }
         AgentRequest agentRequest = agentRequestService.getById(offer.getAgentRequest().getId());
         agentRequest.setClientInfo(clientInfo);
         agentRequestService.save(agentRequest);
