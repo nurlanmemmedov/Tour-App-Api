@@ -27,7 +27,7 @@ public class AuthController {
      * @return
      */
     @PostMapping(path = "/register")
-    public ResponseEntity<String> createUser(@RequestBody @Valid RegisterPostDto userDTO) {
+    public ResponseEntity<String> createUser(@RequestBody @Valid RegisterPostDto userDTO) throws Exception {
         return new ResponseEntity<>(service.register(userDTO), HttpStatus.CREATED);
     }
 
